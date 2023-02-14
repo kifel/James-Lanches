@@ -1,11 +1,14 @@
 import React from "react";
-import { Container } from "./styles";
 
 const Home: React.FC = () => {
   return (
-    <Container>
-      Olá
-    </Container>
+    <div className="container-fluid">
+      <div className="row">
+        <div className="col">
+          <h2>OLÁ MUNDO</h2>
+        </div>
+      </div>
+    </div>
   );
 };
 
