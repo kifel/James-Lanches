@@ -3,10 +3,11 @@ export default {
 
   colors: {
     primary: "#333",
-    secondary: "#00A8E8",
-    tertiary: "#003459",
+    secondary: "#D92949",
+    tertiary: "#8c031c",
 
     background: "#222",
+    backgroundNavbar: "#333",
     text: "#FFF",
   },
 };

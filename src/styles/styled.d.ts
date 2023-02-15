@@ -10,6 +10,7 @@ declare module "styled-components" {
       tertiary: string;
 
       background: string;
+      backgroundNavbar: string;
       text: string;
     };
   }

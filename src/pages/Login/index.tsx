@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider/useAuth";
 import api from "../../service/api";
-import { ButtonsRows, LoginContainer, LogionSection } from "./styles";
+import { Buttons, ButtonsRows, LoginContainer, LogionSection } from "./styles";
 
 interface login {
   username: string;
@@ -48,7 +48,7 @@ const Login: React.FC = () => {
 
                     <div className="form-outline mb-4">
                       <label className="form-label" htmlFor="typeEmailX-2">
-                        Username:
+                        Username:<span style={{color: "red"}}>*</span>
                       </label>
                       <input
                         id="typeEmailX-2"
@@ -70,7 +70,7 @@ const Login: React.FC = () => {
 
                     <div className="form-outline mb-4">
                       <label className="form-label" htmlFor="typePasswordX-2">
-                        Password:
+                        Password:<span style={{color: "red"}}>*</span>
                       </label>
                       <input
                         type="password"
@@ -101,20 +101,20 @@ const Login: React.FC = () => {
                     <div>
                       <ButtonsRows className="row ms-4">
                         <div className="col-6">
-                          <a
-                            className="btn text-white"
+                          <Buttons
+                            className="btn"
                             onClick={() => navigate(-1)}
                           >
                             Esqueceu a senha ?
-                          </a>
+                          </Buttons>
                         </div>
                         <div className="col-6 ms-0">
-                          <a
-                            className="btn text-white"
+                          <Buttons
+                            className="btn"
                             onClick={() => navigate(-1)}
                           >
                             Voltar !
-                          </a>
+                          </Buttons>
                         </div>
                       </ButtonsRows>
                     </div>
