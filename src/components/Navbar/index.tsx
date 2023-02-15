@@ -102,7 +102,7 @@ const ShowHeader = ({ toggleTheme }: Props) => {
                       isactive={themeLight.toString()}
                     >
                       <i className="fa fa-sun-o me-1"> </i>
-                      Tema Claro
+                      Light Theme
                     </ThemeButton>
                   </ThemeList>
                   <ThemeList>
@@ -112,7 +112,7 @@ const ShowHeader = ({ toggleTheme }: Props) => {
                       isactive={themeDark.toString()}
                     >
                       <i className="fa fa-moon-o me-2"> </i>
-                      Tema Escuro
+                      Dark Theme
                     </ThemeButton>
                   </ThemeList>
                 </DropDownUL>
@@ -152,7 +152,7 @@ const ShowHeader = ({ toggleTheme }: Props) => {
 
 const ShowLoggedHeader = ({ toggleTheme }: Props) => {
   const [isFetching, setIsFetching] = useState(true);
-  const [data, setProdutos] = useState<Data>();
+  const [data, setData] = useState<Data>();
   const [error, setError] = useState(null);
   const { title } = useContext(ThemeContext);
   const themeLight = title === "light";
@@ -165,7 +165,7 @@ const ShowLoggedHeader = ({ toggleTheme }: Props) => {
     api
       .get("/users/logged")
       .then((response) => {
-        setProdutos(response.data);
+        setData(response.data);
       })
       .catch((error) => {
         if (error.message === "Failed to refresh token") {
@@ -285,7 +285,7 @@ const ShowLoggedHeader = ({ toggleTheme }: Props) => {
                       isactive={themeLight.toString()}
                     >
                       <i className="fa fa-sun-o me-1"> </i>
-                      Tema Claro
+                      Light Theme
                     </ThemeButton>
                   </ThemeList>
                   <ThemeList>
@@ -295,47 +295,53 @@ const ShowLoggedHeader = ({ toggleTheme }: Props) => {
                       isactive={themeDark.toString()}
                     >
                       <i className="fa fa-moon-o me-2"> </i>
-                      Tema Escuro
+                      Dark Theme
                     </ThemeButton>
                   </ThemeList>
                 </DropDownUL>
               </li>
               <li className="nav-item dropdown">
-                <ThemeDropdown
-                  className="dropdown-toggle ms-4"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  <ImageUser src={data?.imageUrl} alt="User Image" />
-                </ThemeDropdown>
-                <DropDownUL className="dropdown-menu">
-                  <UserList>
-                    {(() => {
-                      if (data && data.roles && data.roles.length > 0) {
-                        for (let i = 0; i < data.roles.length; i++) {
-                          if (data.roles[i].name == "ROLE_ADMIN") {
-                            return (
-                              <>
-                                <UserLink
-                                  className="btn text-color"
-                                  to="/admin"
-                                >
-                                  Admin
-                                </UserLink>
-                              </>
-                            );
+                {isFetching ? (
+                  ""
+                ) : (
+                  <>
+                    <ThemeDropdown
+                      className="dropdown-toggle ms-4"
+                      role="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <ImageUser src={data?.imageUrl} alt="User Image" />
+                    </ThemeDropdown>
+                    <DropDownUL className="dropdown-menu">
+                      <UserList>
+                        {(() => {
+                          if (data && data.roles && data.roles.length > 0) {
+                            for (let i = 0; i < data.roles.length; i++) {
+                              if (data.roles[i].name == "ROLE_ADMIN") {
+                                return (
+                                  <>
+                                    <UserLink
+                                      className="btn text-color"
+                                      to="/admin"
+                                    >
+                                      Admin
+                                    </UserLink>
+                                  </>
+                                );
+                              }
+                            }
                           }
-                        }
-                      }
-                    })()}
-                  </UserList>
-                  <UserList>
-                    <ButtonUser className="btn text-color" onClick={logout}>
-                      Logout
-                    </ButtonUser>
-                  </UserList>
-                </DropDownUL>
+                        })()}
+                      </UserList>
+                      <UserList>
+                        <ButtonUser className="btn text-color" onClick={logout}>
+                          Logout
+                        </ButtonUser>
+                      </UserList>
+                    </DropDownUL>
+                  </>
+                )}
               </li>
             </div>
           </div>
@@ -354,7 +360,8 @@ const Navbar: React.FC<Props> = ({ toggleTheme }) => {
       {(() => {
         if (
           location.pathname !== "/login" &&
-          location.pathname !== "/register"
+          location.pathname !== "/register" &&
+          location.pathname !== "/forbidden"
         ) {
           if (user === undefined || user === null) {
             return (

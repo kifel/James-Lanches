@@ -13,7 +13,7 @@ const Home: React.FC = () => {
   //    })
 
   return (
-    <div className="container-fluid">
+    <div className="container">
       <div className="row">
         <div className="col">
           <h2>OLÁ MUNDO</h2>

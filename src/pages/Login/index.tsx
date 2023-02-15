@@ -111,7 +111,7 @@ const Login: React.FC = () => {
                         <div className="col-6 ms-0">
                           <Buttons
                             className="btn"
-                            onClick={() => navigate(-1)}
+                            onClick={() => navigate("/")}
                           >
                             Voltar !
                           </Buttons>
