@@ -1,6 +1,7 @@
 import { BrowserRouter } from "react-router-dom";
 import { DefaultTheme, ThemeProvider } from "styled-components";
 import Navbar from "./components/Navbar";
+import { AuthProvider } from "./context/AuthProvider";
 import { Router } from "./router/Router";
 import GloBalStyle from "./styles/global";
 import dark from "./styles/themes/dark";
@@ -15,13 +16,15 @@ function App() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <GloBalStyle />
-        <Navbar toggleTheme={toggleTheme} />
-        <Router />
-      </BrowserRouter>
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider theme={theme}>
+        <BrowserRouter>
+          <GloBalStyle />
+          <Navbar toggleTheme={toggleTheme} />
+          <Router />
+        </BrowserRouter>
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
 
