@@ -12,3 +12,9 @@ export interface Data {
   ];
   username: string;
 }
+
+export interface PopupInterface {
+  trigger: boolean;
+  setTrigger: (value: boolean) => void;
+  children: ReactNode;
+}

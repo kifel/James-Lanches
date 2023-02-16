@@ -172,6 +172,7 @@ const ShowLoggedHeader = ({ toggleTheme }: Props) => {
       })
       .catch((error) => {
         if (error.message === "Failed to refresh token") {
+          localStorage.removeItem("user");
           navigate("/login");
         }
         setError(error);
@@ -387,7 +388,9 @@ const Navbar: React.FC<Props> = ({ toggleTheme }) => {
         if (
           location.pathname !== "/login" &&
           location.pathname !== "/register" &&
-          location.pathname !== "/forbidden"
+          location.pathname !== "/forbidden" &&
+          location.pathname !== "/recovery-password" &&
+          location.pathname !== "/recovery-password/reset"
         ) {
           if (user === undefined || user === null) {
             return (

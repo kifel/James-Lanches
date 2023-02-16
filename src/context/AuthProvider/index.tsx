@@ -11,12 +11,8 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
     }
   }
 
-  function logout() {
-    setUserLocalStorage(null);
-  }
-
   return (
-    <AuthContext.Provider value={{ authenticate, logout }}>
+    <AuthContext.Provider value={{ authenticate }}>
       {children}
     </AuthContext.Provider>
   );

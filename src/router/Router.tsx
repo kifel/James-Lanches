@@ -5,7 +5,13 @@ import Forbidden from "../pages/Forbidden";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Orders from "../pages/Orders";
-import { isAuthenticated, isAuthenticatedAdmin } from "../service/auth";
+import RecoveryPassword from "../pages/RecoveryPassword";
+import ConfirmCodePassword from "../pages/RecoveryPassword/ConfirmCodePassword";
+import {
+  isAuthenticated,
+  isAuthenticatedAdmin,
+  isLogged
+} from "../service/auth";
 
 type PrivateAdminProps = {
   children: ReactNode;
@@ -43,6 +49,7 @@ const PrivateAdmin = ({ children }: PrivateAdminProps): JSX.Element => {
   } else if (isAuthenticated === "true") {
     return <>{children}</>;
   } else if (isAuthenticated === "Failed to refresh token") {
+    localStorage.removeItem("user");
     return <Navigate to="/login" />;
   } else {
     return <Navigate to="/forbidden" />;
@@ -79,9 +86,20 @@ const PrivateRoute = ({ children }: PrivateAdminProps): JSX.Element => {
   } else if (isAuth === "true") {
     return <>{children}</>;
   } else if (isAuth === "Failed to refresh token") {
+    localStorage.removeItem("user");
     return <Navigate to="/login" />;
   } else {
     return <Navigate to="/forbidden" />;
+  }
+};
+
+const IsLoggedIn = ({ children }: PrivateAdminProps): JSX.Element => {
+  const auth = isLogged();
+
+  if (!auth) {
+    return <>{children}</>;
+  } else {
+    return <Navigate to="/" />;
   }
 };
 
@@ -89,7 +107,30 @@ export function Router() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/login" element={<Login />} />
+      <Route
+        path="/login"
+        element={
+          <IsLoggedIn>
+            <Login />
+          </IsLoggedIn>
+        }
+      />
+      <Route
+        path="/recovery-password"
+        element={
+          <IsLoggedIn>
+            <RecoveryPassword />
+          </IsLoggedIn>
+        }
+      />
+      <Route
+        path="/recovery-password/:token"
+        element={
+          <IsLoggedIn>
+            <ConfirmCodePassword />
+          </IsLoggedIn>
+        }
+      />
       <Route
         path="/admin"
         element={

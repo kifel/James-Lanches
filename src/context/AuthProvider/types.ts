@@ -10,7 +10,6 @@ export interface IUser {
 
 export interface IContext extends IUser {
   authenticate: (response: IUser) => Promise<void>;
-  logout: () => void;
 }
 
 export interface IAuthProvider {

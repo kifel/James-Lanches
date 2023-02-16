@@ -1,7 +1,9 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { useAuth } from "../../context/AuthProvider/useAuth";
+import { getUserLocalStorage } from "../../context/AuthProvider/util";
 import api from "../../service/api";
 import { Buttons, ButtonsRows, LoginContainer, LogionSection } from "./styles";
 
@@ -11,7 +13,7 @@ interface login {
 }
 
 const Login: React.FC = () => {
-  localStorage.removeItem("user");
+  const user = getUserLocalStorage();
   const auth = useAuth();
   const navigate = useNavigate();
   const {
@@ -22,17 +24,18 @@ const Login: React.FC = () => {
 
   const onSubmit = (data: login) => {
     api
-    .post("/auth/signin", { 
-      username: data.username, 
-      password: data.password
-     })
-    .then((request) => {
-      auth.authenticate(request.data);
-      navigate("/")
-    })
-    .catch((err) => {
-      console.error(err.response.data);
-    });
+      .post("/auth/signin", {
+        username: data.username,
+        password: data.password,
+      })
+      .then((request) => {
+        toast.success("Login successful !");
+        auth.authenticate(request.data);
+        navigate("/");
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
+      });
   };
 
   return (
@@ -44,11 +47,18 @@ const Login: React.FC = () => {
               <LoginContainer className="card shadow-2-strong mb-5">
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <div className="card-body p-5">
+                    <Buttons className="btn" onClick={() => navigate("/")}>
+                      <i
+                        className="fa fa-arrow-left me-2"
+                        aria-hidden="true"
+                      ></i>
+                      Voltar
+                    </Buttons>
                     <h3 className="mb-5 text-center">Sign in</h3>
 
                     <div className="form-outline mb-4">
                       <label className="form-label" htmlFor="typeEmailX-2">
-                        Username:<span style={{color: "red"}}>*</span>
+                        Username:<span style={{ color: "red" }}>*</span>
                       </label>
                       <input
                         id="typeEmailX-2"
@@ -70,7 +80,7 @@ const Login: React.FC = () => {
 
                     <div className="form-outline mb-4">
                       <label className="form-label" htmlFor="typePasswordX-2">
-                        Password:<span style={{color: "red"}}>*</span>
+                        Password:<span style={{ color: "red" }}>*</span>
                       </label>
                       <input
                         type="password"
@@ -98,22 +108,22 @@ const Login: React.FC = () => {
                         Entrar
                       </button>
                     </div>
-                    <div>
-                      <ButtonsRows className="row ms-4">
-                        <div className="col-6">
+                    <div className="container">
+                      <ButtonsRows className="row">
+                        <div className="col-8">
                           <Buttons
                             className="btn"
-                            onClick={() => navigate(-1)}
+                            onClick={() => navigate("/recovery-password")}
                           >
                             Esqueceu a senha ?
                           </Buttons>
                         </div>
-                        <div className="col-6 ms-0">
+                        <div className="col-6">
                           <Buttons
                             className="btn"
-                            onClick={() => navigate("/")}
+                            onClick={() => navigate("/register")}
                           >
-                            Voltar !
+                            Cadastre-se !
                           </Buttons>
                         </div>
                       </ButtonsRows>

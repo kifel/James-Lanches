@@ -1,5 +1,5 @@
+import { getUserLocalStorage } from "../context/AuthProvider/util";
 import api from "./api";
-
 /**
  * If the error message is 'Failed to refresh token', return 'Failed to refresh token', otherwise,
  * return the response data.
@@ -53,4 +53,12 @@ export const isAuthenticated = async () => {
     return "Failed to refresh token";
   }
   return "false";
+};
+
+export const isLogged = () => {
+  const user = getUserLocalStorage();
+  if (user === undefined || user === null) {
+    return false;
+  }
+  return true;
 };
