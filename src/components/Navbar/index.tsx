@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { ThemeContext } from "styled-components";
 import { Data } from "../../@types/globalTypes";
 import { getUserLocalStorage } from "../../context/AuthProvider/util";
+import { pathsRoutesNavbarContent } from "../../router/Router";
 import api from "../../service/api";
 import {
   ButtonUser,
@@ -138,7 +139,8 @@ const ShowHeader = ({ toggleTheme }: Props) => {
                 );
               })()}
               <NavLink to="/login" className="btn">
-                <i className="fa fa-sign-in me-1"> Login</i>
+                <i className="fa fa-sign-in me-1"></i>
+                Login
               </NavLink>
               <NavLink to="/register" className="btn">
                 Register
@@ -363,6 +365,7 @@ ShowLoggedHeader component. If the user is not logged in, it will show the ShowH
 const Navbar: React.FC<Props> = ({ toggleTheme }) => {
   const location = useLocation();
   const user = getUserLocalStorage();
+  const showNavbar = pathsRoutesNavbarContent.some((r) => r.path === location.pathname);
 
   /* Setting the title of the page based on the pathname. */
   useEffect(() => {
@@ -382,16 +385,11 @@ const Navbar: React.FC<Props> = ({ toggleTheme }) => {
     document.title = newTitle;
   }, [location.pathname]);
 
+
   return (
     <>
       {(() => {
-        if (
-          location.pathname !== "/login" &&
-          location.pathname !== "/register" &&
-          location.pathname !== "/forbidden" &&
-          location.pathname !== "/recovery-password" &&
-          location.pathname !== "/recovery-password/reset"
-        ) {
+        if (showNavbar) {
           if (user === undefined || user === null) {
             return (
               <>

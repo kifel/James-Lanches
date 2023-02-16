@@ -4,9 +4,11 @@ import Admin from "../pages/Admin";
 import Forbidden from "../pages/Forbidden";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
+import NotFound from "../pages/NotFound";
 import Orders from "../pages/Orders";
 import RecoveryPassword from "../pages/RecoveryPassword";
 import ConfirmCodePassword from "../pages/RecoveryPassword/ConfirmCodePassword";
+import Register from "../pages/Register";
 import {
   isAuthenticated,
   isAuthenticatedAdmin,
@@ -16,6 +18,28 @@ import {
 type PrivateAdminProps = {
   children: ReactNode;
 };
+
+interface RoutesPath {
+  path: string;
+  component: React.ComponentType<any>;
+}
+
+/* A list of routes that are used in the `Router` function. */
+export const pathsRoutesNavbarContent: RoutesPath[] = [
+  {
+    path: "/",
+    component: Home,
+  },
+  {
+    path: "/admin",
+    component: Admin,
+  },
+  {
+    path: "/orders",
+    component: Orders,
+  },
+  // Adicione outras rotas aqui
+];
 
 /**
  * If the user is authenticated, render the children. If not, redirect to the login page
@@ -132,6 +156,14 @@ export function Router() {
         }
       />
       <Route
+        path="/register"
+        element={
+          <PrivateRoute>
+            <Register />
+          </PrivateRoute>
+        }
+      />
+      <Route
         path="/admin"
         element={
           <PrivateAdmin>
@@ -148,6 +180,8 @@ export function Router() {
         }
       />
       <Route path="/forbidden" element={<Forbidden />} />
+      <Route path="/not-found" element={<NotFound />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
