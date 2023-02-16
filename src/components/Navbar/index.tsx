@@ -26,6 +26,7 @@ interface Props {
   toggleTheme(themeString: string): void;
 }
 
+/* The above code is a React component that is using TypeScript. */
 const ShowHeader = ({ toggleTheme }: Props) => {
   const { title } = useContext(ThemeContext);
   const themeLight = title === "light";
@@ -139,7 +140,7 @@ const ShowHeader = ({ toggleTheme }: Props) => {
               <NavLink to="/login" className="btn">
                 <i className="fa fa-sign-in me-1"> Login</i>
               </NavLink>
-              <NavLink to="/login" className="btn">
+              <NavLink to="/register" className="btn">
                 Register
               </NavLink>
             </div>
@@ -150,8 +151,10 @@ const ShowHeader = ({ toggleTheme }: Props) => {
   );
 };
 
+/* The above code is a React component that is responsible for rendering the header of the application. */
 const ShowLoggedHeader = ({ toggleTheme }: Props) => {
   const [isFetching, setIsFetching] = useState(true);
+  const [isAdmin, setIsAdmin] = useState<boolean>();
   const [data, setData] = useState<Data>();
   const [error, setError] = useState(null);
   const { title } = useContext(ThemeContext);
@@ -177,6 +180,18 @@ const ShowLoggedHeader = ({ toggleTheme }: Props) => {
         setIsFetching(false);
       });
   }, []);
+
+  useEffect(() => {
+    if (data && data.roles && data.roles.length > 0) {
+      for (let i = 0; i < data.roles.length; i++) {
+        if (data.roles[i].name == "ROLE_ADMIN") {
+          setIsAdmin(true);
+        }
+      }
+    } else {
+      setIsAdmin(false);
+    }
+  }, [data]);
 
   const logout = () => {
     api
@@ -300,7 +315,7 @@ const ShowLoggedHeader = ({ toggleTheme }: Props) => {
                   </ThemeList>
                 </DropDownUL>
               </li>
-              <li className="nav-item dropdown">
+              <li className="nav-item dropdown me-5">
                 {isFetching ? (
                   ""
                 ) : (
@@ -315,24 +330,15 @@ const ShowLoggedHeader = ({ toggleTheme }: Props) => {
                     </ThemeDropdown>
                     <DropDownUL className="dropdown-menu">
                       <UserList>
-                        {(() => {
-                          if (data && data.roles && data.roles.length > 0) {
-                            for (let i = 0; i < data.roles.length; i++) {
-                              if (data.roles[i].name == "ROLE_ADMIN") {
-                                return (
-                                  <>
-                                    <UserLink
-                                      className="btn text-color"
-                                      to="/admin"
-                                    >
-                                      Admin
-                                    </UserLink>
-                                  </>
-                                );
-                              }
-                            }
-                          }
-                        })()}
+                        {isAdmin === true ? (
+                          <>
+                            <UserLink className="btn text-color" to="/admin">
+                              Admin
+                            </UserLink>
+                          </>
+                        ) : (
+                          ""
+                        )}
                       </UserList>
                       <UserList>
                         <ButtonUser className="btn text-color" onClick={logout}>
@@ -351,9 +357,29 @@ const ShowLoggedHeader = ({ toggleTheme }: Props) => {
   );
 };
 
+/* Checking if the user is logged in or not. If the user is logged in, it will show the
+ShowLoggedHeader component. If the user is not logged in, it will show the ShowHeader component. */
 const Navbar: React.FC<Props> = ({ toggleTheme }) => {
   const location = useLocation();
   const user = getUserLocalStorage();
+
+  /* Setting the title of the page based on the pathname. */
+  useEffect(() => {
+    const path = location.pathname;
+    let newTitle;
+
+    if (path === "/") {
+      newTitle = "Página Inicial/ James Lanches";
+    } else {
+      const parts = path.split("/");
+      const firstPart = parts[1];
+      const capitalizedFirstPart =
+        firstPart.charAt(0).toUpperCase() + firstPart.slice(1);
+      newTitle = `${capitalizedFirstPart} James Lanches`;
+    }
+
+    document.title = newTitle;
+  }, [location.pathname]);
 
   return (
     <>

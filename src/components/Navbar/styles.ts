@@ -101,6 +101,7 @@ export const ThemeDropdown = styled.a`
 `;
 
 export const ThemeButton = styled.button<Props>`
+  width: 100%;
   color: ${(props) =>
     props.isactive == "true"
       ? props.theme.colors.secondary
@@ -112,6 +113,7 @@ export const ThemeButton = styled.button<Props>`
 `;
 
 export const ButtonUser = styled.button`
+  width: 100%;
   color: ${(props) => props.theme.colors.text};
 
   &:hover {
@@ -139,6 +141,7 @@ export const UserList = styled.li`
 `;
 
 export const UserLink = styled(Link)`
+  width: 100%;
   color: ${(props) => props.theme.colors.text};
 
   &:hover {

@@ -4,6 +4,7 @@ import {
   setUserLocalStorage
 } from "../context/AuthProvider/util";
 
+/* This is creating a new instance of axios with the baseURL and headers. */
 const instance = axios.create({
   baseURL: "https://james-api-production.up.railway.app/api",
   headers: {
@@ -11,6 +12,7 @@ const instance = axios.create({
   },
 });
 
+/* This is adding the access token to the header of the request. */
 instance.interceptors.request.use(
   (config) => {
     const user = getUserLocalStorage();
@@ -24,6 +26,8 @@ instance.interceptors.request.use(
   }
 );
 
+/* Intercepting the response and checking if the response is 401 (unauthorized) and if it is, it will
+try to refresh the token. */
 instance.interceptors.response.use(
   (res) => {
     return res;
