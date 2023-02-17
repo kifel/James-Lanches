@@ -103,7 +103,7 @@ const RecoveryPassword: React.FC = () => {
           <i className="fa fa-check me-2" style={{ color: "green" }}></i>
           Notification
         </h3>
-        <p>If the email exists, a confirmation code was sent</p>
+        <p>If the email exists in the database, password reset link will be send to account email</p>
       </Popup>
     </>
   );

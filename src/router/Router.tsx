@@ -4,7 +4,7 @@ import Admin from "../pages/Admin";
 import Forbidden from "../pages/Forbidden";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
-import NotFound from "../pages/NotFound";
+import { NotFound } from "../pages/NotFound";
 import Orders from "../pages/Orders";
 import RecoveryPassword from "../pages/RecoveryPassword";
 import ConfirmCodePassword from "../pages/RecoveryPassword/ConfirmCodePassword";
@@ -177,7 +177,7 @@ export function Router() {
       />
       <Route path="/forbidden" element={<Forbidden />} />
       <Route path="/not-found" element={<NotFound />} />
-      <Route path="*" element={<NotFound />} />
+      <Route path="*" element={<Navigate to="/not-found" />} />
     </Routes>
   );
 }
