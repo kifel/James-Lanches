@@ -11,8 +11,30 @@ export function getUserLocalStorage(): IUser | null {
     return null;
   }
 
-  const object = JSON.parse(json);
+  let object = null;
+  try {
+    object = JSON.parse(json);
+  } catch (e) {
+    localStorage.removeItem("user");
+  }
 
-  return object ?? null;
+  if (!isUserStorage(object)) {
+    localStorage.removeItem("user");
+    return null;
+  }
+
+  function isUserStorage(object: any): object is IUser {
+    return (
+      object &&
+      typeof object.username === "string" &&
+      typeof object.accessToken === "string" &&
+      typeof object.type === "string" &&
+      typeof object.refreshToken === "string" &&
+      typeof object.id === "number" &&
+      typeof object.email === "string" &&
+      Array.isArray(object.roles)
+    );
+  }
+
+  return object;
 }
-
