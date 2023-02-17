@@ -9,6 +9,7 @@ import Orders from "../pages/Orders";
 import RecoveryPassword from "../pages/RecoveryPassword";
 import ConfirmCodePassword from "../pages/RecoveryPassword/ConfirmCodePassword";
 import Register from "../pages/Register";
+import ConfirmAccount from "../pages/Register/ConfirmAccount";
 import {
   isAuthenticated,
   isAuthenticatedAdmin,
@@ -154,9 +155,17 @@ export function Router() {
       <Route
         path="/register"
         element={
-          <PrivateRoute>
+          <IsLoggedIn>
             <Register />
-          </PrivateRoute>
+          </IsLoggedIn>
+        }
+      />
+      <Route
+        path="/confirm-account/:token"
+        element={
+          <IsLoggedIn>
+            <ConfirmAccount />
+          </IsLoggedIn>
         }
       />
       <Route

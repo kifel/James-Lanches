@@ -205,6 +205,7 @@ const ShowLoggedHeader = ({ toggleTheme }: Props) => {
       })
       .catch((error) => {
         if (error.message === "Failed to refresh token") {
+          localStorage.removeItem("user");
           navigate("/login");
         }
         setError(error);

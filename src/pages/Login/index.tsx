@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../../context/AuthProvider/useAuth";
-import { getUserLocalStorage } from "../../context/AuthProvider/util";
 import api from "../../service/api";
 import { Buttons, ButtonsRows, LoginContainer, LogionSection } from "./styles";
 
@@ -13,7 +12,6 @@ interface login {
 }
 
 const Login: React.FC = () => {
-  const user = getUserLocalStorage();
   const auth = useAuth();
   const navigate = useNavigate();
   const {
