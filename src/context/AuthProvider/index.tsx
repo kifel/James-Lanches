@@ -11,9 +11,18 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
     }
   }
 
+  const contextValue: IContext = {
+    authenticate,
+    accessToken: "",
+    type: "",
+    refreshToken: "",
+    id: "",
+    username: "",
+    email: "",
+    roles: ["", ""],
+  };
+
   return (
-    <AuthContext.Provider value={{ authenticate }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 };

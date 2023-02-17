@@ -2,11 +2,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 type Response<T> = [T, Dispatch<SetStateAction<T>>];
 
-interface MyObject {
-  [key: string]: unknown;
-}
-
-interface ObjectWithUnknownValues extends Record<string, unknown> {}
+type ParseFunction<T> = (value: any) => T;
 
 /**
  * It returns a stateful value, and a function to update it. Both values are initialized to the value
@@ -16,18 +12,23 @@ interface ObjectWithUnknownValues extends Record<string, unknown> {}
  * @param {T} initialState - The initial state of the value you want to persist.
  * @returns An array with two elements.
  */
-function usePersistedState<T extends MyObject>(
+function usePersistedState<T>(
   key: string,
-  initialState: T
+  initialState: T,
+  parseFunction?: ParseFunction<T>
 ): Response<T> {
   const [state, setState] = useState(() => {
     const storageValue = localStorage.getItem(key);
 
     if (storageValue) {
       try {
-        const parsedValue = parseJSON(storageValue, initialState);
+        const parsedValue = parseFunction
+          ? parseFunction(JSON.parse(storageValue))
+          : JSON.parse(storageValue);
+
         return parsedValue;
       } catch (error) {
+        localStorage.removeItem(key);
         console.warn(`Failed to parse value`);
       }
     }
@@ -40,24 +41,6 @@ function usePersistedState<T extends MyObject>(
   }, [key, state]);
 
   return [state, setState];
-}
-
-function parseJSON<T>(
-  json: string,
-  expectedType: T & ObjectWithUnknownValues
-): T {
-  const parsedValue = JSON.parse(json);
-  const keys = Object.keys(expectedType);
-  const actualKeys = Object.keys(parsedValue);
-
-  if (
-    keys.length !== actualKeys.length ||
-    !keys.every((key) => actualKeys.includes(key))
-  ) {
-    throw new Error("JSON does not match expected type");
-  }
-
-  return parsedValue as T;
 }
 
 export default usePersistedState;

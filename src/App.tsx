@@ -12,7 +12,16 @@ import light from "./styles/themes/light";
 import usePersistedState from "./utils/usePersistedState";
 
 function App() {
-  const [theme, setTheme] = usePersistedState<DefaultTheme>("theme", light);
+  const [theme, setTheme] = usePersistedState<DefaultTheme>(
+    "theme",
+    light,
+    (value: any) => {
+      if (value.title && value.colors) {
+        return value as DefaultTheme;
+      }
+      throw new Error("Invalid value");
+    }
+  );
 
   const toggleTheme = (themeString: string) => {
     setTheme(themeString === "light" ? dark : light);
