@@ -21,22 +21,18 @@ type PrivateAdminProps = {
 
 interface RoutesPath {
   path: string;
-  component: React.ComponentType<any>;
 }
 
 /* A list of routes that are used in the `Router` function. */
 export const pathsRoutesNavbarContent: RoutesPath[] = [
   {
     path: "/",
-    component: Home,
   },
   {
     path: "/admin",
-    component: Admin,
   },
   {
     path: "/orders",
-    component: Orders,
   },
   // Adicione outras rotas aqui
 ];
