@@ -23,18 +23,18 @@ export function getUserLocalStorage(): IUser | null {
     return null;
   }
 
-  function isUserStorage(object: any): object is IUser {
-    return (
-      object &&
-      typeof object.username === "string" &&
-      typeof object.accessToken === "string" &&
-      typeof object.type === "string" &&
-      typeof object.refreshToken === "string" &&
-      typeof object.id === "number" &&
-      typeof object.email === "string" &&
-      Array.isArray(object.roles)
-    );
-  }
-
   return object;
+}
+
+function isUserStorage(object: any): object is IUser {
+  return (
+    object &&
+    typeof object.username === "string" &&
+    typeof object.accessToken === "string" &&
+    typeof object.type === "string" &&
+    typeof object.refreshToken === "string" &&
+    typeof object.id === "string" &&
+    typeof object.email === "string" &&
+    Array.isArray(object.roles)
+  );
 }

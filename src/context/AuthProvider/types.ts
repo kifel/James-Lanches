@@ -1,11 +1,11 @@
 export interface IUser {
-  username?: string;
-  accessToken?: string;
-  type?: string;
-  refreshToken?: string;
-  id?: number;
-  email?: string;
-  roles?: Array<string>;
+  accessToken: string;
+  type: string;
+  refreshToken: string;
+  id: string;
+  username: string;
+  email: string;
+  roles: string[];
 }
 
 export interface IContext extends IUser {
