@@ -41,6 +41,7 @@ instance.interceptors.response.use(
       err.response &&
       originalConfig.url !== "/auth/refreshtoken"
       && !originalConfig.url.startsWith("/auth/confirm-account")
+      && !originalConfig.url.startsWith("/password-recovery/reset")
     ) {
       // Access Token was expired
       if (err.response.status === 401 && !originalConfig._retry) {

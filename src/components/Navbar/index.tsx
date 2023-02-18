@@ -278,10 +278,19 @@ const ShowLoggedHeader = ({ toggleTheme }: Props) => {
                     <>
                       <NavCart
                         to="/cart"
-                        className="btn ms-4"
-                        isactive={isActiveCart.toString()}
+                        type="button"
+                        className="btn position-relative ms-4"
                       >
                         <i className="fa fa-shopping-cart"></i>
+                        <span
+                          className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2"
+                          style={{ fontSize: "10px" }}
+                        >
+                          99+
+                          <span className="visually-hidden">
+                            unread messages
+                          </span>
+                        </span>
                       </NavCart>
                     </>
                   );
@@ -367,8 +376,8 @@ const Navbar: React.FC<Props> = ({ toggleTheme }) => {
   const location = useLocation();
   const user = getUserLocalStorage();
   const showNavbar = pathsRoutesNavbarContent.some((r) =>
-  new RegExp(`^${r.path.replace(/:\w+/g, '\\w+')}$`).test(location.pathname)
-);
+    new RegExp(`^${r.path.replace(/:\w+/g, "\\w+")}$`).test(location.pathname)
+  );
 
   /* Setting the title of the page based on the pathname. */
   useEffect(() => {
@@ -387,7 +396,6 @@ const Navbar: React.FC<Props> = ({ toggleTheme }) => {
 
     document.title = newTitle;
   }, [location.pathname]);
-
 
   return (
     <>
