@@ -18,3 +18,23 @@ export interface PopupInterface {
   setTrigger: (value: boolean) => void;
   children: ReactNode;
 }
+
+export interface Category {
+  id: string;
+  name: string;
+  description: string;
+}
+
+export interface Product {
+  id: string;
+  name: string;
+  description: string;
+  rating: number;
+  isActive: boolean;
+  price: number;
+  stock: number;
+  createdAt: Date;
+  updatedAt?: Date | null;
+  imageUrl: string;
+  category: Category;
+}
