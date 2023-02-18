@@ -366,7 +366,9 @@ ShowLoggedHeader component. If the user is not logged in, it will show the ShowH
 const Navbar: React.FC<Props> = ({ toggleTheme }) => {
   const location = useLocation();
   const user = getUserLocalStorage();
-  const showNavbar = pathsRoutesNavbarContent.some((r) => r.path === location.pathname);
+  const showNavbar = pathsRoutesNavbarContent.some((r) =>
+  new RegExp(`^${r.path.replace(/:\w+/g, '\\w+')}$`).test(location.pathname)
+);
 
   /* Setting the title of the page based on the pathname. */
   useEffect(() => {

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../service/api";
+import { Button, Tittle } from "./styles";
 
 const ConfirmAccount: React.FC = () => {
   const navigate = useNavigate();
@@ -23,21 +24,21 @@ const ConfirmAccount: React.FC = () => {
 
   return (
     <>
-      <div className="container">
-        <div className="row text-center">
+      <div className="container py-5 h-100">
+        <div className="row row d-flex justify-content-center align-items-center h-100 text-center">
           {(() => {
             if (isFetching) {
-              return <p>Carregando</p>;
+              return <Tittle>Carregando...</Tittle>;
             }
             if (isFetching === false && error !== null) {
-              return <p>{error}</p>;
+              return <Tittle>{error}</Tittle>;
             } else {
               return (
                 <>
-                  <p>Conta Ativada com sucesso</p>
-                  <button className="btn" onClick={() => navigate("/login")}>
+                  <Tittle>Conta Ativada com sucesso</Tittle>
+                  <Button className="btn" onClick={() => navigate("/login")}>
                     Go to login
-                  </button>
+                  </Button>
                 </>
               );
             }

@@ -35,6 +35,9 @@ export const pathsRoutesNavbarContent: RoutesPath[] = [
   {
     path: "/orders",
   },
+  {
+    path: "/confirm-account/:token",
+  }
   // Adicione outras rotas aqui
 ];
 

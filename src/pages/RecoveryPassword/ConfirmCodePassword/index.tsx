@@ -1,4 +1,3 @@
-import { decode } from 'base-64';
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
@@ -19,7 +18,6 @@ interface Recovery {
 
 const ConfirmCodePassword: React.FC = () => {
   const { token } = useParams();
-  const decodedToken = token ? decode(token) : "";
   const [popup, setPopup] = React.useState(false);
   const navigate = useNavigate();
   const {
@@ -31,7 +29,7 @@ const ConfirmCodePassword: React.FC = () => {
   const onSubmit = (data: Recovery) => {
     api
       .post(
-        `/password-recovery/reset?token=${decodedToken}&password=${data.password}`
+        `/password-recovery/reset?token=${token}&password=${data.password}`
       )
       .then((response) => {
         navigate("/login");
