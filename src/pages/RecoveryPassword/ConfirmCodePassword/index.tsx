@@ -1,3 +1,4 @@
+import { decode } from 'base-64';
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
@@ -17,7 +18,8 @@ interface Recovery {
 }
 
 const ConfirmCodePassword: React.FC = () => {
-  const {token} = useParams();
+  const { token } = useParams();
+  const decodedToken = token ? decode(token) : "";
   const [popup, setPopup] = React.useState(false);
   const navigate = useNavigate();
   const {
@@ -27,19 +29,19 @@ const ConfirmCodePassword: React.FC = () => {
   } = useForm<Recovery>();
 
   const onSubmit = (data: Recovery) => {
-    const decodedToken = token ? token.replace(/=/g, ".") : "";
     api
-      .post(`/password-recovery/reset?token=${decodedToken}&password=${data.password}`)
+      .post(
+        `/password-recovery/reset?token=${decodedToken}&password=${data.password}`
+      )
       .then((response) => {
         navigate("/login");
         toast.success("Reset Password successful !");
       })
       .catch((err) => {
-        console.error(err);
         setPopup(true);
       });
   };
-  
+
   return (
     <>
       <RecoverySection className="vh-100">
