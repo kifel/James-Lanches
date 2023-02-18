@@ -5,8 +5,6 @@ import { toast } from "react-toastify";
 import Popup from "../../../components/Popup/Popup";
 import api from "../../../service/api";
 import {
-  Buttons,
-  ButtonsRows,
   RecoveryContainer,
   RecoverySection
 } from "../styles";
@@ -107,18 +105,6 @@ const ConfirmCodePassword: React.FC = () => {
                       >
                         Entrar
                       </button>
-                    </div>
-                    <div className="container">
-                      <ButtonsRows className="row">
-                        <div className="col-12">
-                          <Buttons
-                            className="btn"
-                            onClick={() => navigate("/register")}
-                          >
-                            Cadastre-se !
-                          </Buttons>
-                        </div>
-                      </ButtonsRows>
                     </div>
                   </div>
                 </form>
