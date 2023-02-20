@@ -6,14 +6,14 @@ interface SectionTittleProps {
   inView: boolean;
 }
 
-// export const Container = styled.div`
-//   transition: all 0.5s ease;
-//   background: rgba(0, 0, 0, 0.001);
-//   color: #f4f4f4;
-//   box-shadow: ${(props) => shade(0.19, props.theme.colors.background)} 0px 10px
-//       20px,
-//     ${(props) => shade(0.23, props.theme.colors.background)} 0px 6px 6px;
-// `;
+export const Container = styled.div`
+  transition: all 0.5s ease;
+  background: rgba(0, 0, 0, 0.001);
+  color: #f4f4f4;
+  box-shadow: ${(props) => shade(0.19, props.theme.colors.background)} 0px 10px
+      20px,
+    ${(props) => shade(0.23, props.theme.colors.background)} 0px 6px 6px;
+`;
 
 export const Banner = styled.img`
   height: 50vh;
@@ -78,15 +78,16 @@ export const SectionTittle = styled.h2<SectionTittleProps>`
   line-height: 1em;
   text-shadow: 0 0 1px rgba(0, 0, 0, 0.01);
   font-weight: bold;
-  width: 380px;
+  width: 300px;
   border-bottom: 2px solid
     ${(props) => (props.inView ? props.theme.colors.secondary : "transparent")};
   padding-bottom: 15px;
+  border-bottom-width: 1px;
   transition: all 0.5s ease;
 
   @media (max-width: 425px) {
     font-size: 1.5rem;
-    width: 300px;
+    width: 250px;
   }
 `;
 
@@ -96,7 +97,6 @@ export const ButtonProducts = styled(Link)`
   background: ${(props) => props.theme.colors.secondary};
   line-height: 1em;
   font-weight: bold;
-  width: 300px;
   transition: all 0.5s ease;
   padding: 15px;
 
@@ -112,15 +112,35 @@ export const AboutUsTitle = styled.h2<SectionTittleProps>`
   line-height: 1em;
   text-shadow: 0 0 1px rgba(0, 0, 0, 0.01);
   font-weight: bold;
-  width: 170px;
+  width: 250px;
   padding-bottom: 15px;
   border-bottom: 2px solid
     ${(props) => (props.inView ? props.theme.colors.secondary : "transparent")};
+  border-bottom-width: 1px;
   transition: all 0.5s ease;
-  margin-top: 150px;
 
   @media (max-width: 425px) {
+    margin: 0 auto;
     font-size: 1.5rem;
-    width: 300px;
+    width: 250px;
+  }
+`;
+
+export const AboutUsCol = styled.div`
+  margin-right: 108px;
+  transition: all 0.5s ease;
+  @media (max-width: 1400px) {
+    margin-bottom: 50px;
+    margin-right: 0px;
+  }
+`;
+
+export const AboutUsText = styled.h2`
+  margin-top: 25px;
+  font-size: 1.2rem;
+  color: ${(props) => props.theme.colors.text};
+  transition: all 0.5s ease;
+  @media (max-width: 768px) {
+    font-size: 1rem;
   }
 `;

@@ -49,8 +49,8 @@ const ShowHeader = ({ toggleTheme }: Props) => {
   };
   const basePaths = {
     "/": "Home",
-    "/products": "Products",
-    "/contact-us": "Contact Us",
+    "/products": "Produto",
+    "/contact-us": "Contate-nos",
   };
 
   return (
@@ -100,7 +100,7 @@ const ShowHeader = ({ toggleTheme }: Props) => {
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  Toggle Theme
+                  Opções de tema
                 </ThemeDropdown>
                 <DropDownUL className="dropdown-menu">
                   <ThemeList>
@@ -110,7 +110,7 @@ const ShowHeader = ({ toggleTheme }: Props) => {
                       isactive={themeLight.toString()}
                     >
                       <i className="bi bi-brightness-high-fill me-2"></i>
-                      Light theme
+                      Modo claro
                     </ThemeButton>
                   </ThemeList>
                   <ThemeList>
@@ -120,7 +120,7 @@ const ShowHeader = ({ toggleTheme }: Props) => {
                       isactive={themeDark.toString()}
                     >
                       <i className="bi bi-moon-stars-fill me-2"></i>
-                      Dark theme
+                      Modo noturno
                     </ThemeButton>
                   </ThemeList>
                 </DropDownUL>
@@ -236,8 +236,8 @@ const ShowLoggedHeader = ({ toggleTheme, user }: PropsLogged) => {
   };
   const basePaths = {
     "/": "Home",
-    "/products": "Products",
-    "/contact-us": "Contact Us",
+    "/products": "Produto",
+    "/contact-us": "Contate-nos",
   };
 
   return (
@@ -280,6 +280,38 @@ const ShowLoggedHeader = ({ toggleTheme, user }: PropsLogged) => {
                   </li>
                 );
               })}
+              <li className="nav-item dropdown">
+                <ThemeDropdown
+                  className="dropdown-toggle ms-4"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Opções de tema
+                </ThemeDropdown>
+                <DropDownUL className="dropdown-menu">
+                  <ThemeList>
+                    <ThemeButton
+                      onClick={toggleThemeLight}
+                      className="btn"
+                      isactive={themeLight.toString()}
+                    >
+                      <i className="bi bi-brightness-high-fill me-2"></i>
+                      Modo claro
+                    </ThemeButton>
+                  </ThemeList>
+                  <ThemeList>
+                    <ThemeButton
+                      onClick={toggleThemeDark}
+                      className="btn"
+                      isactive={themeDark.toString()}
+                    >
+                      <i className="bi bi-moon-stars-fill me-2"></i>
+                      Modo noturno
+                    </ThemeButton>
+                  </ThemeList>
+                </DropDownUL>
+              </li>
             </ul>
             <div className="buttons navbar-nav mx-auto mb-2 mb-lg-0">
               <li>
@@ -293,7 +325,7 @@ const ShowLoggedHeader = ({ toggleTheme, user }: PropsLogged) => {
                       <NavCart
                         to="/cart"
                         type="button"
-                        className="btn position-relative ms-4"
+                        className="btn position-relative ms-4 mt-1"
                       >
                         <i className="bi bi-basket"></i>
                         <span
@@ -310,38 +342,6 @@ const ShowLoggedHeader = ({ toggleTheme, user }: PropsLogged) => {
                   );
                 })()}
               </li>
-              <li className="nav-item dropdown mt-2">
-                <ThemeDropdown
-                  className="dropdown-toggle ms-4"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Toggle Theme
-                </ThemeDropdown>
-                <DropDownUL className="dropdown-menu">
-                  <ThemeList>
-                    <ThemeButton
-                      onClick={toggleThemeLight}
-                      className="btn"
-                      isactive={themeLight.toString()}
-                    >
-                      <i className="bi bi-brightness-high-fill me-2"></i>
-                      Light Theme
-                    </ThemeButton>
-                  </ThemeList>
-                  <ThemeList>
-                    <ThemeButton
-                      onClick={toggleThemeDark}
-                      className="btn"
-                      isactive={themeDark.toString()}
-                    >
-                      <i className="bi bi-moon-stars-fill me-2"></i>
-                      Dark Theme
-                    </ThemeButton>
-                  </ThemeList>
-                </DropDownUL>
-              </li>
               <li className="nav-item dropdown me-5">
                 {isFetching ? (
                   ""
@@ -353,7 +353,11 @@ const ShowLoggedHeader = ({ toggleTheme, user }: PropsLogged) => {
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
                     >
-                      <ImageUser src={data?.imageUrl} alt="User Image" className="mt-1"/>
+                      <ImageUser
+                        src={data?.imageUrl}
+                        alt="User Image"
+                        className="mt-1"
+                      />
                     </ThemeDropdown>
                     <DropDownUL className="dropdown-menu">
                       <UserList>
@@ -371,19 +375,19 @@ const ShowLoggedHeader = ({ toggleTheme, user }: PropsLogged) => {
                       <UserList>
                         <UserLink className="btn text-color" to="/orders">
                           <i className="bi bi-receipt me-2"></i>
-                          My orders
+                          Meus pedidos
                         </UserLink>
                       </UserList>
                       <UserList>
                         <UserLink className="btn text-color" to="/settings">
                           <i className="bi bi-gear me-2"></i>
-                          Settings
+                          Configuração
                         </UserLink>
                       </UserList>
                       <UserList>
                         <ButtonUser className="btn text-color" onClick={logout}>
                           <i className="bi bi-box-arrow-left me-2"></i>
-                          Logout
+                          Sair
                         </ButtonUser>
                       </UserList>
                     </DropDownUL>

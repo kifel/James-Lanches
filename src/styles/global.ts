@@ -14,7 +14,7 @@ export default createGlobalStyle`
   }
 
   ::-webkit-scrollbar {
-    width: 6px
+    width: 5px;
   }
 
   ::-webkit-scrollbar-track {
@@ -22,6 +22,7 @@ export default createGlobalStyle`
   }
 
   ::-webkit-scrollbar-thumb {
+    border-radius: 8px;
     background: ${props => props.theme.colors.primary};
   }
 
