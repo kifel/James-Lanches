@@ -146,9 +146,9 @@ const Home: React.FC = () => {
           <SectionTittle inView={sectionTittleInView} className="text-center">
             MAIS VENDIDOS
           </SectionTittle>
-          <FlatList data={data} />
+          <FlatList data={data} data-aos="flip-left"/>
         </div>
-        <div className="container text-center" data-aos="fade-right">
+        <div className="container text-center">
           <ButtonProducts className="btn mt-5 text-center" to="/products">
             Todos os produtos
           </ButtonProducts>

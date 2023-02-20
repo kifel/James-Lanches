@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Product } from "../../@types/globalTypes";
 import { Card, LinkStyles, Price } from "./styles";
 
@@ -11,7 +11,7 @@ const FlatList: React.FC<FlatListProps> = ({ data }) => {
     <div className="row row-cols-1 g-4 d-flex justify-content-center align-items-center h-100">
       {data.map((product) => (
         <LinkStyles to={`/products/${product.id}`} key={product.id}>
-          <div className="col" key={product.id}>
+          <div className="col" key={product.id} data-aos="flip-left">
             <Card className="card mb-3">
               <div className="row g-0">
                 <div className="col-md-4">
@@ -39,4 +39,4 @@ const FlatList: React.FC<FlatListProps> = ({ data }) => {
   );
 };
 
-export default FlatList;
+export default memo(FlatList);
