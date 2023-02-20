@@ -6,6 +6,7 @@ import aboutImage from "../../assets/aboutImage.jpg";
 import image2 from "../../assets/mainpage2.jpg";
 import image3 from "../../assets/mainpage3.jpg";
 import image from "../../assets/mainpageimage.jpg";
+import BackToTop from "../../components/BackToTop";
 import FlatList from "../../components/FlatList";
 import Footer from "../../components/Footer";
 import api from "../../service/api";
@@ -146,10 +147,14 @@ const Home: React.FC = () => {
           <SectionTittle inView={sectionTittleInView} className="text-center">
             MAIS VENDIDOS
           </SectionTittle>
-          <FlatList data={data} data-aos="flip-left"/>
+          <FlatList data={data} data-aos="flip-left" />
         </div>
         <div className="container text-center">
-          <ButtonProducts className="btn mt-5 text-center" to="/products">
+          <ButtonProducts
+            className="btn mt-5 text-center"
+            to="/products"
+            data-aos="fade-up"
+          >
             Todos os produtos
           </ButtonProducts>
         </div>
@@ -182,13 +187,14 @@ const Home: React.FC = () => {
                   src={aboutImage}
                   alt="about image"
                   className="img-fluid"
-                  data-aos="zoom-out-left"
+                  data-aos="zoom-out-up"
                 />
               </div>
             </div>
           </div>
         </div>
       </div>
+      <BackToTop />
       <Footer />
     </>
   );
