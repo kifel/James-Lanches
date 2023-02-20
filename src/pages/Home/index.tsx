@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import Aos from "aos";
+import React, { useEffect, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { Product } from "../../@types/globalTypes";
 import aboutImage from "../../assets/aboutImage.jpg";
@@ -6,6 +7,7 @@ import image2 from "../../assets/mainpage2.jpg";
 import image3 from "../../assets/mainpage3.jpg";
 import image from "../../assets/mainpageimage.jpg";
 import FlatList from "../../components/FlatList";
+import Footer from "../../components/Footer";
 import api from "../../service/api";
 import {
   AboutUsCol,
@@ -15,12 +17,14 @@ import {
   ButtonProducts,
   CartText,
   Container,
+  ImageAbout,
   SectionTittle,
   Tittle,
   TittleSpan
 } from "./styles";
 
 const Home: React.FC = () => {
+  const about = useRef();
   const [data, setData] = useState<Product[]>([]);
   const [sectionTittleRef, sectionTittleInView] = useInView({
     threshold: 0.3, // define a porcentagem da altura do elemento que deve estar visível para disparar a detecção
@@ -32,6 +36,7 @@ const Home: React.FC = () => {
   });
 
   useEffect(() => {
+    Aos.init({ duration: 1000 });
     api.get("/products/search?isActive=true&page=0&size=3").then((response) => {
       setData(response.data.content);
     });
@@ -92,10 +97,10 @@ const Home: React.FC = () => {
               alt="home page image"
             />
             <div className="carousel-caption d-block d-md-block">
-              <h5>Second slide label</h5>
-              <p>
-                Some representative placeholder content for the second slide.
-              </p>
+              <Tittle>Crispy delicioso</Tittle>
+              <CartText>
+                Simplesmente o melhor Crispy da região.
+              </CartText>
             </div>
           </div>
           <div className="carousel-item" data-bs-interval="2000">
@@ -105,10 +110,10 @@ const Home: React.FC = () => {
               alt="home page image"
             />
             <div className="carousel-caption d-block d-md-block">
-              <h5>Third slide label</h5>
-              <p>
-                Some representative placeholder content for the third slide.
-              </p>
+              <Tittle>A Família adora</Tittle>
+              <CartText>
+                Sempre temos combos incríveis.
+              </CartText>
             </div>
           </div>
         </div>
@@ -147,19 +152,22 @@ const Home: React.FC = () => {
           </SectionTittle>
           <FlatList data={data} />
         </div>
-        <div className="container text-center">
+        <div className="container text-center" data-aos="fade-right">
           <ButtonProducts className="btn mt-5 text-center" to="/products">
             Todos os produtos
           </ButtonProducts>
         </div>
-        <div className="container mt-5 text-center">
+        <div className="container mt-5 text-center" data-aos="fade-up">
           <div className="row">
             <div className="col-12 mt-5">
               <AboutUsTitle className="mt-5" inView={aboutUsInView}>
                 Sobre Nós
               </AboutUsTitle>
             </div>
-            <div className="row d-flex justify-content-center align-items-center" ref={aboutUsRef}>
+            <div
+              className="row d-flex justify-content-center align-items-center"
+              ref={aboutUsRef}
+            >
               <AboutUsCol className="col-12 col-md-5 text-center mt-5">
                 <AboutUsText>
                   James-Lanches é uma lanchonete que oferece uma ampla variedade
@@ -174,53 +182,13 @@ const Home: React.FC = () => {
                 </AboutUsText>
               </AboutUsCol>
               <div className="col-12 col-md-6 text-center">
-                <img src={aboutImage} alt="" className="img-fluid" />
+                <ImageAbout src={aboutImage} alt="" className="img-fluid" />
               </div>
             </div>
           </div>
         </div>
       </div>
-      <footer className="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top mt-5">
-        <div className="col-md-4 d-flex align-items-center">
-          <a
-            href="/"
-            className="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1 mt-3"
-          >
-            <i
-              className="bi bi-amd ms-5 me-2 mt-2"
-              style={{ fontSize: "20px" }}
-            ></i>
-          </a>
-          <span className="mb-3 mb-md-0 text-muted mt-3">© 2023 Kifel, Inc</span>
-        </div>
-
-        <ul className="nav col-md-4 justify-content-end list-unstyled d-flex">
-          <li className="ms-3">
-            <a className="text-muted" href="#">
-              <i
-                className="bi bi-github"
-                style={{fontSize: "20px" }}
-              ></i>
-            </a>
-          </li>
-          <li className="ms-3">
-            <a className="text-muted" href="#">
-              <i
-                className="bi bi-instagram"
-                style={{fontSize: "20px" }}
-              ></i>
-            </a>
-          </li>
-          <li className="ms-3">
-            <a className="text-muted" href="#">
-              <i
-                className="bi bi-linkedin me-5"
-                style={{fontSize: "20px" }}
-              ></i>
-            </a>
-          </li>
-        </ul>
-      </footer>
+      <Footer />
     </>
   );
 };

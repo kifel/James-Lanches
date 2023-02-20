@@ -128,7 +128,6 @@ export const AboutUsTitle = styled.h2<SectionTittleProps>`
 
 export const AboutUsCol = styled.div`
   margin-right: 108px;
-  transition: all 0.5s ease;
   @media (max-width: 1400px) {
     margin-bottom: 50px;
     margin-right: 0px;
@@ -139,8 +138,11 @@ export const AboutUsText = styled.h2`
   margin-top: 25px;
   font-size: 1.2rem;
   color: ${(props) => props.theme.colors.text};
-  transition: all 0.5s ease;
   @media (max-width: 768px) {
     font-size: 1rem;
   }
+`;
+
+export const ImageAbout = styled.img`
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 `;
