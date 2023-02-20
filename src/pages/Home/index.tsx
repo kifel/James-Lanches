@@ -36,7 +36,7 @@ const Home: React.FC = () => {
   });
 
   useEffect(() => {
-    Aos.init({ duration: 1000 });
+    Aos.init({ duration: 2000 });
     api.get("/products/search?isActive=true&page=0&size=3").then((response) => {
       setData(response.data.content);
     });
@@ -178,7 +178,12 @@ const Home: React.FC = () => {
                 </AboutUsText>
               </AboutUsCol>
               <div className="col-12 col-md-6 text-center">
-                <ImageAbout src={aboutImage} alt="" className="img-fluid" />
+                <ImageAbout
+                  src={aboutImage}
+                  alt="about image"
+                  className="img-fluid"
+                  data-aos="zoom-out-left"
+                />
               </div>
             </div>
           </div>
