@@ -4,9 +4,17 @@ import {
   setUserLocalStorage
 } from "../context/AuthProvider/util";
 
+const API_BASE_URL = "https://james-api-production.up.railway.app/api";
+const AUTH_ENDPOINTS = {
+  SIGN_IN: "/auth/signin",
+  REFRESH_TOKEN: "/auth/refreshtoken",
+  CONFIRM_ACCOUNT: "/auth/confirm-account",
+  RESET_PASSWORD: "/password-recovery/reset",
+};
+
 /* This is creating a new instance of axios with the baseURL and headers. */
 const instance = axios.create({
-  baseURL: "https://james-api-production.up.railway.app/api",
+  baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -37,11 +45,11 @@ instance.interceptors.response.use(
     const originalConfig = err.config;
 
     if (
-      originalConfig.url !== "/auth/signin" &&
+      originalConfig.url !== AUTH_ENDPOINTS.SIGN_IN &&
       err.response &&
-      originalConfig.url !== "/auth/refreshtoken"
-      && !originalConfig.url.startsWith("/auth/confirm-account")
-      && !originalConfig.url.startsWith("/password-recovery/reset")
+      originalConfig.url !== AUTH_ENDPOINTS.REFRESH_TOKEN &&
+      !originalConfig.url.startsWith(AUTH_ENDPOINTS.CONFIRM_ACCOUNT) &&
+      !originalConfig.url.startsWith(AUTH_ENDPOINTS.RESET_PASSWORD)
     ) {
       // Access Token was expired
       if (err.response.status === 401 && !originalConfig._retry) {

@@ -166,7 +166,7 @@ const Register: React.FC = () => {
                             {...register("password", {
                               required: "You must specify a password",
                               minLength: {
-                                value: 6,
+                                value: 8,
                                 message:
                                   "Password must be at least 6 characters",
                               },

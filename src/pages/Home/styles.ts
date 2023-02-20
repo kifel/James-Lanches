@@ -1,4 +1,5 @@
 import { shade } from "polished";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 interface SectionTittleProps {
@@ -8,8 +9,8 @@ interface SectionTittleProps {
 export const Container = styled.div`
   background: rgba(0, 0, 0, 0.001);
   color: #f4f4f4;
-  box-shadow: ${(props) => shade(0.19, props.theme.colors.background)} 0px
-      10px 20px,
+  box-shadow: ${(props) => shade(0.19, props.theme.colors.background)} 0px 10px
+      20px,
     ${(props) => shade(0.23, props.theme.colors.background)} 0px 6px 6px;
 `;
 
@@ -76,4 +77,20 @@ export const SectionTittle = styled.h2<SectionTittleProps>`
     ${(props) => (props.inView ? props.theme.colors.secondary : "transparent")};
   padding-bottom: 15px;
   transition: all 0.5s ease;
+`;
+
+export const ButtonProducts = styled(Link)`
+  color: #f4f4f4f4;
+  font-size: 1.5rem;
+  background: ${(props) => props.theme.colors.secondary};
+  line-height: 1em;
+  font-weight: bold;
+  width: 300px;
+  transition: all 0.5s ease;
+  padding: 15px;
+
+  &:hover {
+    background: ${(props) => shade(0.5, props.theme.colors.secondary)};
+    color: #f4f4f4f4;
+  }
 `;

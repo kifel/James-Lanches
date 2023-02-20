@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ThemeContext } from "styled-components";
 import { Data } from "../../@types/globalTypes";
+import { IUser } from "../../context/AuthProvider/types";
 import { getUserLocalStorage } from "../../context/AuthProvider/util";
 import { pathsRoutesNavbarContent } from "../../router/Router";
 import api from "../../service/api";
@@ -25,6 +26,11 @@ import {
 
 interface Props {
   toggleTheme(themeString: string): void;
+}
+
+interface PropsLogged {
+  toggleTheme(themeString: string): void;
+  user: IUser;
 }
 
 /* The above code is a React component that is using TypeScript. */
@@ -130,10 +136,17 @@ const ShowHeader = ({ toggleTheme }: Props) => {
                   <>
                     <NavCart
                       to="/cart"
-                      className="btn"
-                      isactive={isActiveCart.toString()}
+                      type="button"
+                      className="btn position-relative ms-4"
                     >
-                      <i className="fa fa-shopping-cart me-2"></i>
+                      <i className="bi bi-basket"></i>
+                      <span
+                        className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2"
+                        style={{ fontSize: "10px" }}
+                      >
+                        99+
+                        <span className="visually-hidden">unread messages</span>
+                      </span>
                     </NavCart>
                   </>
                 );
@@ -154,7 +167,7 @@ const ShowHeader = ({ toggleTheme }: Props) => {
 };
 
 /* The above code is a React component that is responsible for rendering the header of the application. */
-const ShowLoggedHeader = ({ toggleTheme }: Props) => {
+const ShowLoggedHeader = ({ toggleTheme, user }: PropsLogged) => {
   const [isFetching, setIsFetching] = useState(true);
   const [isAdmin, setIsAdmin] = useState<boolean>();
   const [data, setData] = useState<Data>();
@@ -198,7 +211,9 @@ const ShowLoggedHeader = ({ toggleTheme }: Props) => {
 
   const logout = () => {
     api
-      .post("/auth/signout")
+      .post("/auth/signout", {
+        refreshToken: user.refreshToken,
+      })
       .then(() => {
         localStorage.removeItem("user");
         navigate("/");
@@ -223,7 +238,6 @@ const ShowLoggedHeader = ({ toggleTheme }: Props) => {
     "/": "Home",
     "/products": "Products",
     "/categories": "Categories",
-    "/orders": "Orders",
   };
 
   return (
@@ -281,7 +295,7 @@ const ShowLoggedHeader = ({ toggleTheme }: Props) => {
                         type="button"
                         className="btn position-relative ms-4"
                       >
-                        <i className="fa fa-shopping-cart"></i>
+                        <i className="bi bi-basket"></i>
                         <span
                           className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2"
                           style={{ fontSize: "10px" }}
@@ -346,6 +360,7 @@ const ShowLoggedHeader = ({ toggleTheme }: Props) => {
                         {isAdmin === true ? (
                           <>
                             <UserLink className="btn text-color" to="/admin">
+                              <i className="bi bi-person-lock me-2"></i>
                               Admin
                             </UserLink>
                           </>
@@ -354,7 +369,20 @@ const ShowLoggedHeader = ({ toggleTheme }: Props) => {
                         )}
                       </UserList>
                       <UserList>
+                        <UserLink className="btn text-color" to="/orders">
+                          <i className="bi bi-receipt me-2"></i>
+                          My orders
+                        </UserLink>
+                      </UserList>
+                      <UserList>
+                        <UserLink className="btn text-color" to="/settings">
+                          <i className="bi bi-gear me-2"></i>
+                          Settings
+                        </UserLink>
+                      </UserList>
+                      <UserList>
                         <ButtonUser className="btn text-color" onClick={logout}>
+                          <i className="bi bi-box-arrow-left me-2"></i>
                           Logout
                         </ButtonUser>
                       </UserList>
@@ -410,7 +438,7 @@ const Navbar: React.FC<Props> = ({ toggleTheme }) => {
           } else {
             return (
               <>
-                <ShowLoggedHeader toggleTheme={toggleTheme} />
+                <ShowLoggedHeader toggleTheme={toggleTheme} user={user} />
               </>
             );
           }

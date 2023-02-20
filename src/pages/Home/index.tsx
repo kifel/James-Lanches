@@ -7,6 +7,7 @@ import FlatList from "../../components/FlatList";
 import api from "../../service/api";
 import {
   Banner,
+  ButtonProducts,
   CartText,
   Container,
   SectionTittle,
@@ -15,11 +16,15 @@ import {
 } from "./styles";
 
 const Home: React.FC = () => {
-  const navigate = useNavigate();
   const [data, setData] = useState<Product[]>([]);
-  const [ref, inView] = useInView({
-    threshold: 0.5, // define a porcentagem da altura do elemento que deve estar visível para disparar a detecção
-    triggerOnce: true, // define se a detecção deve ser disparada apenas uma vez
+  const navigate = useNavigate();
+  const [sectionTittleRef, sectionTittleInView] = useInView({
+    threshold: 0.2, // define a porcentagem da altura do elemento que deve estar visível para disparar a detecção
+    triggerOnce: false, // define se a detecção deve ser disparada apenas uma vez
+  });
+  const [buttonProductsRef, buttonProductsInView] = useInView({
+    threshold: 0.1, // define a porcentagem da altura do elemento que deve estar visível para disparar a detecção
+    triggerOnce: false, // define se a detecção deve ser disparada apenas uma vez
   });
 
   useEffect(() => {
@@ -53,11 +58,40 @@ const Home: React.FC = () => {
         </div>
       </Container>
       <div className="container-fluid mt-5">
-        <div className="row d-flex justify-content-center align-items-center h-100">
-          <SectionTittle inView={inView} ref={ref}>
+        <div
+          className="row d-flex justify-content-center align-items-center h-100"
+          ref={sectionTittleRef}
+        >
+          <SectionTittle inView={sectionTittleInView}>
             MAIS VENDIDOS
           </SectionTittle>
           <FlatList data={data} />
+        </div>
+        <div className="container text-center">
+          <ButtonProducts className="btn mt-4" to="/products">
+            Veja todos os produtos
+          </ButtonProducts>
+        </div>
+        <div className="container">
+          <div className="row d-flex justify-content-center align-items-center mt-5">
+            <h1>Sobre Nós</h1>
+            <div className="col-12 col-md-6 text-center mt-5">
+              <p>
+                James-Lanches é uma lanchonete que oferece uma ampla variedade
+                de lanches saborosos e bem-feitos com ingredientes frescos e
+                selecionados. Nossa prioridade é garantir a qualidade dos nossos
+                alimentos a preços acessíveis, sem comprometer o atendimento
+                excepcional aos nossos clientes. Além disso, oferecemos uma
+                variedade de opções para atender a todos os gostos e
+                preferências alimentares. Venha experimentar nossos lanches e
+                desfrutar de nossa atmosfera aconchegante com amigos e
+                familiares.
+              </p>
+            </div>
+            <div className="col-12 col-md-6 text-center">
+              <p>IMAGEM AQUI</p>
+            </div>
+          </div>
         </div>
       </div>
     </>

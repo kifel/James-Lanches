@@ -13,6 +13,18 @@ export default createGlobalStyle`
     -moz-osx-font-smoothing: grayscale;
   }
 
+  ::-webkit-scrollbar {
+    width: 6px
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #cececece;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: ${props => props.theme.colors.primary};
+  }
+
   body {
     background: ${(props) => props.theme.colors.background};
     font-size: 14px;
