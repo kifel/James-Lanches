@@ -50,7 +50,7 @@ const ShowHeader = ({ toggleTheme }: Props) => {
   const basePaths = {
     "/": "Home",
     "/products": "Products",
-    "/categories": "Categories",
+    "/contact-us": "Contact Us",
   };
 
   return (
@@ -100,7 +100,7 @@ const ShowHeader = ({ toggleTheme }: Props) => {
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  Themes
+                  Toggle Theme
                 </ThemeDropdown>
                 <DropDownUL className="dropdown-menu">
                   <ThemeList>
@@ -109,8 +109,8 @@ const ShowHeader = ({ toggleTheme }: Props) => {
                       className="btn"
                       isactive={themeLight.toString()}
                     >
-                      <i className="fa fa-sun-o me-1"> </i>
-                      Light Theme
+                      <i className="bi bi-brightness-high-fill me-2"></i>
+                      Light theme
                     </ThemeButton>
                   </ThemeList>
                   <ThemeList>
@@ -119,8 +119,8 @@ const ShowHeader = ({ toggleTheme }: Props) => {
                       className="btn"
                       isactive={themeDark.toString()}
                     >
-                      <i className="fa fa-moon-o me-2"> </i>
-                      Dark Theme
+                      <i className="bi bi-moon-stars-fill me-2"></i>
+                      Dark theme
                     </ThemeButton>
                   </ThemeList>
                 </DropDownUL>
@@ -237,7 +237,7 @@ const ShowLoggedHeader = ({ toggleTheme, user }: PropsLogged) => {
   const basePaths = {
     "/": "Home",
     "/products": "Products",
-    "/categories": "Categories",
+    "/contact-us": "Contact Us",
   };
 
   return (
@@ -317,7 +317,7 @@ const ShowLoggedHeader = ({ toggleTheme, user }: PropsLogged) => {
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  Themes
+                  Toggle Theme
                 </ThemeDropdown>
                 <DropDownUL className="dropdown-menu">
                   <ThemeList>
@@ -326,7 +326,7 @@ const ShowLoggedHeader = ({ toggleTheme, user }: PropsLogged) => {
                       className="btn"
                       isactive={themeLight.toString()}
                     >
-                      <i className="fa fa-sun-o me-1"> </i>
+                      <i className="bi bi-brightness-high-fill me-2"></i>
                       Light Theme
                     </ThemeButton>
                   </ThemeList>
@@ -336,7 +336,7 @@ const ShowLoggedHeader = ({ toggleTheme, user }: PropsLogged) => {
                       className="btn"
                       isactive={themeDark.toString()}
                     >
-                      <i className="fa fa-moon-o me-2"> </i>
+                      <i className="bi bi-moon-stars-fill me-2"></i>
                       Dark Theme
                     </ThemeButton>
                   </ThemeList>
@@ -353,7 +353,7 @@ const ShowLoggedHeader = ({ toggleTheme, user }: PropsLogged) => {
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
                     >
-                      <ImageUser src={data?.imageUrl} alt="User Image" />
+                      <ImageUser src={data?.imageUrl} alt="User Image" className="mt-1"/>
                     </ThemeDropdown>
                     <DropDownUL className="dropdown-menu">
                       <UserList>
