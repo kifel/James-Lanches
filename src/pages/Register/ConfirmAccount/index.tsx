@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import Footer from "../../../components/Footer";
 import api from "../../../service/api";
 import { Button, Tittle } from "./styles";
 
@@ -44,6 +45,9 @@ const ConfirmAccount: React.FC = () => {
             }
           })()}
         </div>
+      </div>
+      <div className="fixed-bottom">
+        <Footer />
       </div>
     </>
   );

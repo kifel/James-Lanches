@@ -2,6 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Footer from "../../components/Footer";
 import { useAuth } from "../../context/AuthProvider/useAuth";
 import api from "../../service/api";
 import { Buttons, ButtonsRows, LoginContainer, LogionSection } from "./styles";
@@ -46,17 +47,14 @@ const Login: React.FC = () => {
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <div className="card-body p-5">
                     <Buttons className="btn" onClick={() => navigate("/")}>
-                      <i
-                        className="fa fa-arrow-left me-2"
-                        aria-hidden="true"
-                      ></i>
+                      <i className="bi bi-arrow-90deg-left me-2"></i>
                       Voltar
                     </Buttons>
-                    <h3 className="mb-5 text-center">Sign in</h3>
+                    <h3 className="mb-5 text-center">Login</h3>
 
                     <div className="form-outline mb-4">
                       <label className="form-label" htmlFor="typeEmailX-2">
-                        Username:<span style={{ color: "red" }}>*</span>
+                        Usuário:<span style={{ color: "red" }}>*</span>
                       </label>
                       <input
                         id="typeEmailX-2"
@@ -78,7 +76,7 @@ const Login: React.FC = () => {
 
                     <div className="form-outline mb-4">
                       <label className="form-label" htmlFor="typePasswordX-2">
-                        Password:<span style={{ color: "red" }}>*</span>
+                        Senha:<span style={{ color: "red" }}>*</span>
                       </label>
                       <input
                         type="password"
@@ -133,6 +131,9 @@ const Login: React.FC = () => {
           </div>
         </div>
       </LogionSection>
+      <div className="fixed-bottom">
+        <Footer />
+      </div>
     </>
   );
 };

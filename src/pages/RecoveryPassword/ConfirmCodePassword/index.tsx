@@ -1,13 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import Footer from "../../../components/Footer";
 import Popup from "../../../components/Popup/Popup";
 import api from "../../../service/api";
-import {
-  RecoveryContainer,
-  RecoverySection
-} from "../styles";
+import { RecoveryContainer, RecoverySection } from "../styles";
 
 interface Recovery {
   password?: string;
@@ -26,9 +24,7 @@ const ConfirmCodePassword: React.FC = () => {
 
   const onSubmit = (data: Recovery) => {
     api
-      .post(
-        `/password-recovery/reset?token=${token}&password=${data.password}`
-      )
+      .post(`/password-recovery/reset?token=${token}&password=${data.password}`)
       .then((response) => {
         navigate("/login");
         toast.success("Reset Password successful !");
@@ -37,6 +33,19 @@ const ConfirmCodePassword: React.FC = () => {
         setPopup(true);
       });
   };
+
+  useEffect(() => {
+    function handleBeforeUnload(event: any) {
+      event.preventDefault();
+      event.returnValue = "";
+    }
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
 
   return (
     <>
@@ -47,11 +56,11 @@ const ConfirmCodePassword: React.FC = () => {
               <RecoveryContainer className="card shadow-2-strong mb-5">
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <div className="card-body p-5">
-                    <h3 className="mb-5 text-center mt-3">Reset Password</h3>
+                    <h3 className="mb-5 text-center mt-3">Redefinir senha</h3>
 
                     <div className="form-outline mb-4">
                       <label className="form-label" htmlFor="typeEmailX-2">
-                        New Password:<span style={{ color: "red" }}>*</span>
+                        Nova senha:<span style={{ color: "red" }}>*</span>
                       </label>
                       <input
                         type="password"
@@ -59,10 +68,10 @@ const ConfirmCodePassword: React.FC = () => {
                         className="form-control form-control-lg"
                         placeholder="Nova senha"
                         {...register("password", {
-                          required: "You must specify a password",
+                          required: "Você deve especificar uma senha",
                           minLength: {
                             value: 8,
-                            message: "Password must have at least 8 characters",
+                            message: "A senha deve ter pelo menos 8 caracteres",
                           },
                         })}
                       />
@@ -74,20 +83,20 @@ const ConfirmCodePassword: React.FC = () => {
                     </div>
                     <div className="form-outline mb-4">
                       <label className="form-label" htmlFor="typeEmailX-1">
-                        Confirm Password:<span style={{ color: "red" }}>*</span>
+                        Confirme a senha:<span style={{ color: "red" }}>*</span>
                       </label>
                       <input
                         type="password"
                         id="typeEmailX-1"
                         className="form-control form-control-lg"
-                        placeholder="Nova senha"
+                        placeholder="Corfrime a senha"
                         {...register("confirm_password", {
                           required: true,
                           validate: (val: any, values: Recovery) => {
                             if (values.password === val) {
                               return true;
                             } else {
-                              return "Your passwords do not match";
+                              return "Suas senhas não coincidem";
                             }
                           },
                         })}
@@ -103,7 +112,7 @@ const ConfirmCodePassword: React.FC = () => {
                         type="submit"
                         className="btn btn-lg btn-primary btn-login text-uppercase fw-bold mt-5"
                       >
-                        Entrar
+                        Redefinir
                       </button>
                     </div>
                   </div>
@@ -111,6 +120,9 @@ const ConfirmCodePassword: React.FC = () => {
               </RecoveryContainer>
             </div>
           </div>
+        </div>
+        <div className="fixed-bottom">
+          <Footer />
         </div>
       </RecoverySection>
       <Popup trigger={popup} setTrigger={setPopup}>

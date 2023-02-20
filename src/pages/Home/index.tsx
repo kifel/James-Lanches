@@ -98,9 +98,7 @@ const Home: React.FC = () => {
             />
             <div className="carousel-caption d-block d-md-block">
               <Tittle>Crispy delicioso</Tittle>
-              <CartText>
-                Simplesmente o melhor Crispy da região.
-              </CartText>
+              <CartText>Simplesmente o melhor Crispy da região.</CartText>
             </div>
           </div>
           <div className="carousel-item" data-bs-interval="2000">
@@ -111,9 +109,7 @@ const Home: React.FC = () => {
             />
             <div className="carousel-caption d-block d-md-block">
               <Tittle>A Família adora</Tittle>
-              <CartText>
-                Sempre temos combos incríveis.
-              </CartText>
+              <CartText>Sempre temos combos incríveis.</CartText>
             </div>
           </div>
         </div>

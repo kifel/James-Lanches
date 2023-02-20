@@ -156,7 +156,7 @@ const ShowHeader = ({ toggleTheme }: Props) => {
                 Login
               </NavLink>
               <NavLink to="/register" className="btn">
-                Register
+                Cadastre-se
               </NavLink>
             </div>
           </div>
@@ -408,7 +408,9 @@ const Navbar: React.FC<Props> = ({ toggleTheme }) => {
   const location = useLocation();
   const user = getUserLocalStorage();
   const showNavbar = pathsRoutesNavbarContent.some((r) =>
-    new RegExp(`^${r.path.replace(/:\w+/g, "\\w+")}$`).test(location.pathname)
+    new RegExp(`^${r.path.replace(/:\w+/g, "[\\w-]+")}$`).test(
+      location.pathname
+    )
   );
 
   /* Setting the title of the page based on the pathname. */

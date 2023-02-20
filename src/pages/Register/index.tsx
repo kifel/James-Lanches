@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import Footer from "../../components/Footer";
 import Popup from "../../components/Popup/Popup";
 import api from "../../service/api";
 import { Buttons, RegisterContainer, RegisterSection } from "./styles";
@@ -54,27 +55,24 @@ const Register: React.FC = () => {
               <RegisterContainer className="card shadow-2-strong mb-5">
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <div className="card-body p-5">
-                    <Buttons className="btn" onClick={() => navigate("/")}>
-                      <i
-                        className="fa fa-arrow-left me-2"
-                        aria-hidden="true"
-                      ></i>
+                    <Buttons className="btn" onClick={() => navigate(-1)}>
+                      <i className="bi bi-arrow-90deg-left me-2"></i>
                       Voltar
                     </Buttons>
-                    <h3 className="mb-5 text-center">Sign-up</h3>
+                    <h3 className="mb-5 text-center">Cadastre-se</h3>
 
                     <div className="row">
                       <div className="col-6">
                         <div className="form-outline mb-4">
                           <label className="form-label" htmlFor="typeName">
-                            Name:<span style={{ color: "red" }}>*</span>
+                            Nome:<span style={{ color: "red" }}>*</span>
                           </label>
                           <input
                             id="typeName"
                             className="form-control form-control-lg"
                             placeholder="Informe seu nome"
                             {...register("name", {
-                              required: "You must specify a name",
+                              required: "Você deve especificar um nome",
                             })}
                           />
                           {errors.name && (
@@ -87,14 +85,14 @@ const Register: React.FC = () => {
                       <div className="col-6">
                         <div className="form-outline mb-4">
                           <label className="form-label" htmlFor="typeEmailX-2">
-                            Username:<span style={{ color: "red" }}>*</span>
+                            Usuário:<span style={{ color: "red" }}>*</span>
                           </label>
                           <input
                             id="typeEmailX-2"
                             className="form-control form-control-lg"
                             placeholder="Informe seu usuário"
                             {...register("username", {
-                              required: "You must specify a username",
+                              required: "Você deve especificar um usuário",
                             })}
                           />
                           {errors.username && (
@@ -115,10 +113,10 @@ const Register: React.FC = () => {
                         className="form-control form-control-lg"
                         placeholder="Informe seu email"
                         {...register("email", {
-                          required: "You must specify a email",
+                          required: "Você deve especificar um email",
                           pattern: {
                             value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                            message: "invalid email address",
+                            message: "Endereço de email invalido",
                           },
                         })}
                       />
@@ -139,7 +137,7 @@ const Register: React.FC = () => {
                         className="form-control form-control-lg"
                         placeholder="Digite sua telefone"
                         {...register("telefone", {
-                          required: "You must specify a telefone",
+                          required: "Você deve especificar um telefone",
                         })}
                       />
                       {errors.telefone && (
@@ -156,7 +154,7 @@ const Register: React.FC = () => {
                             className="form-label"
                             htmlFor="typePasswordX-2"
                           >
-                            Password:<span style={{ color: "red" }}>*</span>
+                            Senha:<span style={{ color: "red" }}>*</span>
                           </label>
                           <input
                             type="password"
@@ -164,11 +162,11 @@ const Register: React.FC = () => {
                             className="form-control form-control-lg"
                             placeholder="Digite sua senha"
                             {...register("password", {
-                              required: "You must specify a password",
+                              required: "Você deve especificar uma senha",
                               minLength: {
                                 value: 8,
                                 message:
-                                  "Password must be at least 8 characters",
+                                  "A senha deve conter pelo menos 8 caracteres",
                               },
                             })}
                           />
@@ -182,7 +180,7 @@ const Register: React.FC = () => {
                       <div className="col-6">
                         <div className="form-outline mb-4">
                           <label className="form-label" htmlFor="typeEmailX-1">
-                            Confirm Password:
+                            Confirme a senha:
                             <span style={{ color: "red" }}>*</span>
                           </label>
                           <input
@@ -196,7 +194,7 @@ const Register: React.FC = () => {
                                 if (values.password === val) {
                                   return true;
                                 } else {
-                                  return "Your passwords do not match";
+                                  return "Suas senhas não coincidem";
                                 }
                               },
                             })}
@@ -215,7 +213,7 @@ const Register: React.FC = () => {
                         type="submit"
                         className="btn btn-lg btn-primary btn-login text-uppercase fw-bold mt-5"
                       >
-                        Entrar
+                        CADASTRAR
                       </button>
                     </div>
                   </div>
@@ -225,6 +223,9 @@ const Register: React.FC = () => {
           </div>
         </div>
       </RegisterSection>
+      <div className="fixed-bottom">
+        <Footer />
+      </div>
       <Popup trigger={popup} setTrigger={setPopup}>
         <h3>
           <i className="fa fa-exclamation me-2"></i>

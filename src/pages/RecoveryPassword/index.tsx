@@ -1,12 +1,10 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import Footer from "../../components/Footer";
 import Popup from "../../components/Popup/Popup";
 import api from "../../service/api";
-import {
-  Buttons, RecoveryContainer,
-  RecoverySection
-} from "./styles";
+import { Buttons, RecoveryContainer, RecoverySection } from "./styles";
 
 interface Recovery {
   email?: string;
@@ -39,13 +37,12 @@ const RecoveryPassword: React.FC = () => {
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <div className="card-body p-5">
                     <Buttons className="btn" onClick={() => navigate("/login")}>
-                      <i
-                        className="fa fa-arrow-left me-2"
-                        aria-hidden="true"
-                      ></i>
+                      <i className="bi bi-arrow-90deg-left me-2"></i>
                       Voltar
                     </Buttons>
-                    <h3 className="mb-5 text-center mt-3">Recovery Password</h3>
+                    <h3 className="mb-5 text-center mt-3">
+                      Senha de Recuperação
+                    </h3>
 
                     <div className="form-outline mb-4">
                       <label className="form-label" htmlFor="typeEmailX-2">
@@ -84,12 +81,18 @@ const RecoveryPassword: React.FC = () => {
           </div>
         </div>
       </RecoverySection>
+      <div className="fixed-bottom">
+        <Footer />
+      </div>
       <Popup trigger={popup} setTrigger={setPopup}>
         <h3>
           <i className="fa fa-check me-2" style={{ color: "green" }}></i>
-          Notification
+          Notificação
         </h3>
-        <p>If the email exists in the database, password reset link will be send to account email</p>
+        <p>
+          Se o e-mail existir no banco de dados, o link de redefinição de senha
+          será enviado para conta de e-mail
+        </p>
       </Popup>
     </>
   );
