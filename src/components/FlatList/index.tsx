@@ -10,7 +10,7 @@ const FlatList: React.FC<FlatListProps> = ({ data }) => {
   return (
     <div className="row row-cols-1 g-4 d-flex justify-content-center align-items-center h-100">
       {data.map((product) => (
-        <LinkStyles to={`/products/${product.id}`} key={product.id}>
+        <LinkStyles to={`/products/show/${product.id}`} key={product.id}>
           <div className="col" key={product.id} data-aos="flip-left">
             <Card className="card mb-3">
               <div className="row g-0">

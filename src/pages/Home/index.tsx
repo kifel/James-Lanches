@@ -37,7 +37,7 @@ const Home: React.FC = () => {
   });
 
   useEffect(() => {
-    Aos.init({ duration: 2000 });
+    Aos.init({ duration: 800 });
     api.get("/products/search?isActive=true&page=0&size=3").then((response) => {
       setData(response.data.content);
     });
@@ -139,7 +139,7 @@ const Home: React.FC = () => {
           <span className="visually-hidden">Next</span>
         </button>
       </Container>
-      <div className="container-fluid mt-5">
+      <div className="container-fluid">
         <div
           className="row d-flex justify-content-center align-items-center h-100"
           ref={sectionTittleRef}

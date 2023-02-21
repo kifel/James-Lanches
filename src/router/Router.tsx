@@ -6,6 +6,7 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import { NotFound } from "../pages/NotFound";
 import Orders from "../pages/Orders";
+import Products from "../pages/Products";
 import RecoveryPassword from "../pages/RecoveryPassword";
 import ConfirmCodePassword from "../pages/RecoveryPassword/ConfirmCodePassword";
 import Register from "../pages/Register";
@@ -37,7 +38,10 @@ export const pathsRoutesNavbarContent: RoutesPath[] = [
   },
   {
     path: "/confirm-account/:token",
-  }
+  },
+  {
+    path: "/products",
+  },
   // Adicione outras rotas aqui
 ];
 
@@ -187,6 +191,7 @@ export function Router() {
           </PrivateRoute>
         }
       />
+      <Route path="/products" element={<Products />} />
       <Route path="/forbidden" element={<Forbidden />} />
       <Route path="/not-found" element={<NotFound />} />
       <Route path="*" element={<Navigate to="/not-found" />} />

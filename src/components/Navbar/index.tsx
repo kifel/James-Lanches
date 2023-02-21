@@ -384,6 +384,7 @@ const ShowLoggedHeader = ({ toggleTheme, user }: PropsLogged) => {
                           Configuração
                         </UserLink>
                       </UserList>
+                      <li><hr className="dropdown-divider" /></li>
                       <UserList>
                         <ButtonUser className="btn text-color" onClick={logout}>
                           <i className="bi bi-box-arrow-left me-2"></i>
