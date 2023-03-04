@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { PageableProduct } from "../../@types/globalTypes";
+import BackToTop from "../../components/BackToTop";
 import Footer from "../../components/Footer";
 import ProductCard from "../../components/ProductCard";
 import { useDebounce } from "../../hooks/useDebounce";
@@ -12,7 +13,7 @@ const Products: React.FC = () => {
   const [page, setPage] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
   const [isFetching, setIsFetching] = useState<boolean>(true);
-  const [data, setData] = useState<PageableProduct>();
+  const [data, setData] = useState<PageableProduct | null>();
   const [erro, setErro] = useState<string>("");
 
   const categoria = useMemo(() => {
@@ -31,6 +32,7 @@ const Products: React.FC = () => {
 
   useEffect(() => {
     debounce(() => {
+      setData(null);
       setIsFetching(true);
       setErro("");
       if (buscar === "" && categoria === "") {
@@ -101,9 +103,9 @@ const Products: React.FC = () => {
   function renderPagination() {
     if (!isFetching && erro === "" && data && data.numberOfElements > 0) {
       return (
-        <div className="container">
-          <div className="row">
-            <div className="col d-flex justify-content-center">
+        <div className="container mt-5">
+          <div className="row mt-5">
+            <div className="col d-flex justify-content-center mt-5">
               <StyledPagination
                 count={data?.totalPages}
                 page={pagina}
@@ -127,37 +129,30 @@ const Products: React.FC = () => {
 
   return (
     <>
-      <div className="container-fluid mt-5">
+      <div className="container mt-5">
         <div className="row">
-          <div className="col-12 col-md-3">
-            <p>CATEGORIAS AQUI</p>
+          <div className="col-6 col-md-6">
+            <input
+              type="buscar"
+              placeholder="Buscar"
+              value={buscar}
+              className="form-control"
+              onChange={(e) =>
+                setSearchParams(
+                  { buscar: e.target.value, categoria },
+                  { replace: true }
+                )
+              }
+            />
           </div>
-          <div className="col-12 col-md-9">
-            <div className="container-fluid">
-              <input
-                type="buscar"
-                placeholder="Buscar"
-                value={buscar}
-                className="form-control"
-                onChange={(e) =>
-                  setSearchParams(
-                    { buscar: e.target.value, categoria },
-                    { replace: true }
-                  )
-                }
-              />
-              <div className="row">
-                {isFetching ? (
-                  "Loading..."
-                ) : (
-                  <ProductCard data={data?.content} />
-                )}
-              </div>
-              {renderPagination()}
-            </div>
+          <div className="col-6">
+            CATEGORIA AQUI
           </div>
         </div>
+        {isFetching ? "Loading..." : <ProductCard data={data?.content} />}
+        {renderPagination()}
       </div>
+      <BackToTop />
       <Footer />
     </>
   );
