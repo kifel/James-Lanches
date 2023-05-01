@@ -2,12 +2,13 @@ import { rgba, shade } from "polished";
 import styled from "styled-components";
 
 export const Button = styled.button`
-  position: fixed;
-  bottom: 45px;
-  right: 30px;
-  display: none;
-  padding: 10px;
-  border-radius: 2px;
+	position: fixed;
+	bottom: 110px;
+	right: 30px;
+	display: none;
+	width: 25px;
+	height: 25px;
+	border-radius: 2px;
   background: ${(props) => rgba(props.theme.colors.primary, 0.8)};
   color: white;
   border: none;
@@ -23,6 +24,6 @@ export const Button = styled.button`
 `;
 
 export const Icon = styled.i`
-  font-size: 15px;
+  font-size: 18px;
   color: #f4f4f4f4;
 `;

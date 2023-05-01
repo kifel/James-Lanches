@@ -1,12 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { PageableProduct } from "../../@types/globalTypes";
+import { CategoryProduct, PageableProduct } from "../../@types/globalTypes";
 import BackToTop from "../../components/BackToTop";
 import Footer from "../../components/Footer";
 import ProductCard from "../../components/ProductCard";
 import { useDebounce } from "../../hooks/useDebounce";
 import api from "../../service/api";
-import { StyledPagination } from "./styles";
+import { SearchProductBox, SelectCategory, StyledPagination } from "./styles";
 
 const Products: React.FC = () => {
   const { debounce } = useDebounce(300, true);
@@ -14,6 +14,7 @@ const Products: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [isFetching, setIsFetching] = useState<boolean>(true);
   const [data, setData] = useState<PageableProduct | null>();
+  const [category, setCategory] = useState<CategoryProduct[]>();
   const [erro, setErro] = useState<string>("");
 
   const categoria = useMemo(() => {
@@ -29,6 +30,12 @@ const Products: React.FC = () => {
     setPage(atualPage - 1);
     return atualPage;
   }, [searchParams]);
+
+  useEffect(() => {
+    api.get("/category").then((response) => {
+      setCategory(response.data);
+    });
+  }, []);
 
   useEffect(() => {
     debounce(() => {
@@ -100,39 +107,53 @@ const Products: React.FC = () => {
     });
   }, [buscar, page, categoria]);
 
-  function renderPagination() {
+  const renderNotFound = () => {
     if (!isFetching && erro === "" && data && data.numberOfElements > 0) {
-      return (
-        <div className="container mt-5">
-          <div className="row mt-5">
-            <div className="col d-flex justify-content-center mt-5">
-              <StyledPagination
-                count={data?.totalPages}
-                page={pagina}
-                onChange={(_, newPage) =>
-                  setSearchParams(
-                    {
-                      buscar,
-                      categoria,
-                      pagina: newPage.toString(),
-                    },
-                    { replace: true }
-                  )
-                }
-              />
-            </div>
+      return renderPagination();
+    }
+    return (
+      <div className="d-flex justify-content-center align-items-center mt-5">
+        <div className="text-center mt-5">
+          <h1 className="mb-4 mt-5">Product Not Found</h1>
+          <p className="lead">
+            We're sorry, but we couldn't find the product you were looking for.
+          </p>
+        </div>
+      </div>
+    );
+  };
+
+  const renderPagination = () => {
+    return (
+      <div className="container mt-5">
+        <div className="row mt-5">
+          <div className="col d-flex justify-content-center mt-5">
+            <StyledPagination
+              count={data?.totalPages}
+              page={pagina}
+              onChange={(_, newPage) =>
+                setSearchParams(
+                  {
+                    buscar,
+                    categoria,
+                    pagina: newPage.toString(),
+                  },
+                  { replace: true }
+                )
+              }
+            />
           </div>
         </div>
-      );
-    }
-  }
+      </div>
+    );
+  };
 
   return (
     <>
       <div className="container mt-5">
         <div className="row">
           <div className="col-6 col-md-6">
-            <input
+            <SearchProductBox
               type="buscar"
               placeholder="Buscar"
               value={buscar}
@@ -146,14 +167,32 @@ const Products: React.FC = () => {
             />
           </div>
           <div className="col-6">
-            CATEGORIA AQUI
+            <SelectCategory
+              className="form-select"
+              aria-label="Default select example"
+              onChange={(e) =>
+                setSearchParams(
+                  { categoria: e.target.value, buscar },
+                  { replace: true }
+                )
+              }
+            >
+              <option value="">Todas as categorias</option>
+              {category?.map((cat) => (
+                <option value={cat.name} key={cat.id}>
+                  {cat.name}
+                </option>
+              ))}
+            </SelectCategory>
           </div>
         </div>
         {isFetching ? "Loading..." : <ProductCard data={data?.content} />}
-        {renderPagination()}
+        {isFetching ? "" : renderNotFound()}
       </div>
       <BackToTop />
-      <Footer />
+      <div className="fixed-bottom">
+        <Footer />
+      </div>
     </>
   );
 };

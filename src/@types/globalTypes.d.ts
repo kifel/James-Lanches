@@ -25,6 +25,13 @@ export interface Category {
   description: string;
 }
 
+export interface CategoryProduct {
+  id: string
+  name: string
+  description: string
+  products: Product[]
+}
+
 export interface Product {
   id: string;
   name: string;

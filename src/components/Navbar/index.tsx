@@ -420,7 +420,7 @@ const Navbar: React.FC<Props> = ({ toggleTheme }) => {
     let newTitle;
 
     if (path === "/") {
-      newTitle = "Página Inicial/ James Lanches";
+      newTitle = "Página Inicial - James Lanches";
     } else {
       const parts = path.split("/");
       const firstPart = parts[1];

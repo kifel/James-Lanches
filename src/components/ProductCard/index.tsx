@@ -1,5 +1,6 @@
 import React from "react";
 import { Product } from "../../@types/globalTypes";
+import { Card } from "./styles";
 
 interface CardProps {
   data: Product[] | undefined;
@@ -14,7 +15,11 @@ const ProductCard: React.FC<CardProps> = ({ data }) => {
             className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3"
             key={product.id}
           >
-            <div className="card mt-5" style={{height: "24rem"}}>
+            <Card
+              className="card mt-5"
+              style={{ height: "24rem" }}
+              to={`/products/show/${product.id}`}
+            >
               <img
                 src={product.imageUrl}
                 className="card-img-top"
@@ -25,7 +30,7 @@ const ProductCard: React.FC<CardProps> = ({ data }) => {
                 <p className="card-text">{product.description}</p>
                 <p className="card-text">{product.price.toFixed(2)}</p>
               </div>
-            </div>
+            </Card>
           </div>
         ))}
       </div>

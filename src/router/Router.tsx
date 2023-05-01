@@ -7,6 +7,7 @@ import Login from "../pages/Login";
 import { NotFound } from "../pages/NotFound";
 import Orders from "../pages/Orders";
 import Products from "../pages/Products";
+import ProductsDetails from "../pages/Products/ProductsDetails";
 import RecoveryPassword from "../pages/RecoveryPassword";
 import ConfirmCodePassword from "../pages/RecoveryPassword/ConfirmCodePassword";
 import Register from "../pages/Register";
@@ -41,6 +42,9 @@ export const pathsRoutesNavbarContent: RoutesPath[] = [
   },
   {
     path: "/products",
+  },
+  {
+    path: "/products/show/:id",
   },
   // Adicione outras rotas aqui
 ];
@@ -192,6 +196,7 @@ export function Router() {
         }
       />
       <Route path="/products" element={<Products />} />
+      <Route path="/products/show/:id" element={<ProductsDetails />} />
       <Route path="/forbidden" element={<Forbidden />} />
       <Route path="/not-found" element={<NotFound />} />
       <Route path="*" element={<Navigate to="/not-found" />} />
