@@ -125,10 +125,11 @@ const Products: React.FC = () => {
 
   const renderPagination = () => {
     return (
-      <div className="container mt-5">
-        <div className="row mt-5">
-          <div className="col d-flex justify-content-center mt-5">
+      <div className="container mb-5">
+        <div className="row mb-5">
+          <div className="col d-flex justify-content-center mt-5 mb-5">
             <StyledPagination
+              className="mb-5"
               count={data?.totalPages}
               page={pagina}
               onChange={(_, newPage) =>
