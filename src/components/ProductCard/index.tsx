@@ -1,6 +1,6 @@
 import React from "react";
 import { Product } from "../../@types/globalTypes";
-import { Card } from "./styles";
+import { Card, ImageCard } from "./styles";
 
 interface CardProps {
   data: Product[] | undefined;
@@ -17,18 +17,33 @@ const ProductCard: React.FC<CardProps> = ({ data }) => {
           >
             <Card
               className="card mt-5"
-              style={{ height: "24rem" }}
+              style={{ height: "26rem" }}
               to={`/products/show/${product.id}`}
             >
-              <img
+              <ImageCard
                 src={product.imageUrl}
                 className="card-img-top"
                 alt={product.name}
               />
-              <div className="card-body">
-                <p className="card-text">{product.name}</p>
-                <p className="card-text">{product.description}</p>
-                <p className="card-text">{product.price.toFixed(2)}</p>
+              <div className="card-body d-flex flex-column">
+                <p
+                  className="card-text text-center font-weight-bold"
+                  style={{ fontSize: 20 }}
+                >
+                  {product.name}
+                </p>
+                {product.description.length > 100 ? (
+                  <p className="card-text">
+                    {product.description.substring(0, 100)}...
+                  </p>
+                ) : (
+                  <p className="card-text">{product.description}</p>
+                )}
+                <div className="d-flex mt-auto justify-content-center">
+                  <p className="card-text mb-3 btn btn-outline-success" style={{fontSize: 16}}>
+                    R$ {product.price.toFixed(2)}
+                  </p>
+                </div>
               </div>
             </Card>
           </div>

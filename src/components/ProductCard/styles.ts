@@ -14,3 +14,10 @@ export const Card = styled(Link)`
     background: ${(props) => shade(0.2, props.theme.colors.backgroundNavbar)};
   }
 `;
+
+export const ImageCard = styled.img`
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+`
+

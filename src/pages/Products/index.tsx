@@ -44,7 +44,7 @@ const Products: React.FC = () => {
       setErro("");
       if (buscar === "" && categoria === "") {
         api
-          .get(`/products/search?isActive=true&page=${page}&size=10`)
+          .get(`/products/search?isActive=true&page=${page}&size=12`)
           .then((response) => {
             setData(response.data);
           })
@@ -59,7 +59,7 @@ const Products: React.FC = () => {
       if (buscar === "" && categoria !== "") {
         api
           .get(
-            `/products/search?categoryName=${categoria}&isActive=true&page=${page}&size=10`
+            `/products/search?categoryName=${categoria}&isActive=true&page=${page}&size=12`
           )
           .then((response) => {
             setData(response.data);
@@ -75,7 +75,7 @@ const Products: React.FC = () => {
       if (categoria === "" && buscar !== "") {
         api
           .get(
-            `/products/search?name=${buscar}&isActive=true&page=${page}&size=10`
+            `/products/search?name=${buscar}&isActive=true&page=${page}&size=12`
           )
           .then((response) => {
             setData(response.data);
@@ -91,7 +91,7 @@ const Products: React.FC = () => {
       if (buscar && categoria !== "") {
         api
           .get(
-            `/products/search?name=${buscar}&categoryName=${categoria}&isActive=true&page=${page}&size=10`
+            `/products/search?name=${buscar}&categoryName=${categoria}&isActive=true&page=${page}&size=12`
           )
           .then((response) => {
             console.log(response.data);
