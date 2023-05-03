@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Footer from "../../components/Footer";
 import { useAuth } from "../../context/AuthProvider/useAuth";
 import api from "../../service/api";
-import { Buttons, ButtonsRows, LoginContainer, LogionSection } from "./styles";
+import { Button, Buttons, ButtonsRows, LoginContainer, LogionSection } from "./styles";
 
 interface login {
   username: string;
@@ -15,6 +15,7 @@ interface login {
 const Login: React.FC = () => {
   const auth = useAuth();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(false);
   const {
     handleSubmit,
     register,
@@ -22,6 +23,7 @@ const Login: React.FC = () => {
   } = useForm<login>();
 
   const onSubmit = (data: login) => {
+    setLoading(true);
     api
       .post("/auth/signin", {
         username: data.username,
@@ -34,6 +36,9 @@ const Login: React.FC = () => {
       })
       .catch((err) => {
         toast.error(err.response.data.message);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -97,12 +102,14 @@ const Login: React.FC = () => {
                       )}
                     </div>
                     <div className="d-grid">
-                      <button
+                      <Button
                         type="submit"
-                        className="btn btn-lg btn-primary btn-login text-uppercase fw-bold mt-5"
-                      >
-                        Entrar
-                      </button>
+                        className="btn btn-lg btn-danger btn-login text-uppercase fw-bold mt-5"
+                        disabled={loading}
+                        loading={loading.toString()}
+                        >
+                           {loading ? "" : "Entrar"}
+                      </Button>
                     </div>
                     <div className="container">
                       <ButtonsRows className="row">

@@ -25,6 +25,7 @@ export const PopupInner = styled.div`
 `;
 
 export const CloseButton = styled.button`
+  font-size: 25px;
   position: absolute;
   top: 16px;
   right: 16px;
@@ -33,6 +34,6 @@ export const CloseButton = styled.button`
   transition: color 0.3s;
 
   &:hover {
-    color: ${props => props.theme.colors.secondary};
+    color: ${(props) => props.theme.colors.secondary};
   }
 `;

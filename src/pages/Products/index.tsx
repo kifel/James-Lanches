@@ -6,7 +6,7 @@ import Footer from "../../components/Footer";
 import ProductCard from "../../components/ProductCard";
 import { useDebounce } from "../../hooks/useDebounce";
 import api from "../../service/api";
-import { SearchProductBox, SelectCategory, StyledPagination } from "./styles";
+import { ProductNotFound, SearchProductBox, SelectCategory, StyledPagination } from "./styles";
 
 const Products: React.FC = () => {
   const { debounce } = useDebounce(300, true);
@@ -112,24 +112,24 @@ const Products: React.FC = () => {
       return renderPagination();
     }
     return (
-      <div className="d-flex justify-content-center align-items-center mt-5">
+      <ProductNotFound  className="d-flex justify-content-center align-items-center mt-5">
         <div className="text-center mt-5">
-          <h1 className="mb-4 mt-5">Product Not Found</h1>
+          <h1 className="mb-4 mt-5">Produto não encontrado</h1>
           <p className="lead">
-            We're sorry, but we couldn't find the product you were looking for.
+            Pedimos desculpas, mas não conseguimos encontrar o produto que você
+            estava procurando.
           </p>
         </div>
-      </div>
+      </ProductNotFound>
     );
   };
 
   const renderPagination = () => {
     return (
-      <div className="container mb-5">
-        <div className="row mb-5">
-          <div className="col d-flex justify-content-center mt-5 mb-5">
+      <div className="container mt-5">
+        <div className="row mt-5">
+          <div className="col d-flex justify-content-center">
             <StyledPagination
-              className="mb-5"
               count={data?.totalPages}
               page={pagina}
               onChange={(_, newPage) =>
@@ -191,9 +191,7 @@ const Products: React.FC = () => {
         {isFetching ? "" : renderNotFound()}
       </div>
       <BackToTop />
-      <div className="fixed-bottom">
-        <Footer />
-      </div>
+      <Footer />
     </>
   );
 };

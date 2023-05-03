@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Footer from "../../components/Footer";
 import Popup from "../../components/Popup/Popup";
 import api from "../../service/api";
-import { Buttons, RecoveryContainer, RecoverySection } from "./styles";
+import { Button, Buttons, RecoveryContainer, RecoverySection } from "./styles";
 
 interface Recovery {
   email?: string;
@@ -12,6 +12,7 @@ interface Recovery {
 
 const RecoveryPassword: React.FC = () => {
   const [popup, setPopup] = React.useState(false);
+  const [loading, setLoading] = React.useState<boolean>(false);
   const navigate = useNavigate();
   const {
     handleSubmit,
@@ -20,10 +21,12 @@ const RecoveryPassword: React.FC = () => {
   } = useForm<Recovery>();
 
   const onSubmit = (data: Recovery) => {
+    setLoading(true);
     api
       .post(`/password-recovery/send-email?email=${data.email}`)
       .finally(() => {
         setPopup(true);
+        setLoading(false);
       });
   };
 
@@ -67,12 +70,14 @@ const RecoveryPassword: React.FC = () => {
                       )}
                     </div>
                     <div className="d-grid">
-                      <button
+                    <Button
                         type="submit"
-                        className="btn btn-lg btn-primary btn-login text-uppercase fw-bold mt-5"
-                      >
-                        Entrar
-                      </button>
+                        className="btn btn-lg btn-danger btn-login text-uppercase fw-bold mt-5"
+                        disabled={loading}
+                        loading={loading.toString()}
+                        >
+                           {loading ? "" : "Enviar"}
+                      </Button>
                     </div>
                   </div>
                 </form>

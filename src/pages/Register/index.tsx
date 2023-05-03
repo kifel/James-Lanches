@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Footer from "../../components/Footer";
 import Popup from "../../components/Popup/Popup";
 import api from "../../service/api";
-import { Buttons, RegisterContainer, RegisterSection } from "./styles";
+import { Button, Buttons, RegisterContainer, RegisterSection } from "./styles";
 
 interface Register {
   username: string;
@@ -15,10 +15,12 @@ interface Register {
   confirm_password?: string;
 }
 
+
 const Register: React.FC = () => {
   const navigate = useNavigate();
   const [response, setResponse] = React.useState<string>("");
   const [popup, setPopup] = React.useState(false);
+  const [loading, setLoading] = React.useState<boolean>(false);
   const {
     handleSubmit,
     register,
@@ -26,6 +28,7 @@ const Register: React.FC = () => {
   } = useForm<Register>();
 
   const onSubmit = (data: Register) => {
+    setLoading(true);
     api
       .post("/auth/signup", {
         username: data.username,
@@ -43,6 +46,9 @@ const Register: React.FC = () => {
       .catch((err) => {
         setResponse(err.response.data.errors[0]);
         setPopup(true);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -209,12 +215,14 @@ const Register: React.FC = () => {
                     </div>
 
                     <div className="d-grid">
-                      <button
+                      <Button
                         type="submit"
-                        className="btn btn-lg btn-primary btn-login text-uppercase fw-bold mt-5"
+                        className="btn btn-lg btn-danger btn-login text-uppercase fw-bold mt-5"
+                        disabled={loading}
+                        loading={loading.toString()}
                       >
-                        CADASTRAR
-                      </button>
+                         {loading ? "" : "CADASTRAR"}
+                      </Button>
                     </div>
                   </div>
                 </form>

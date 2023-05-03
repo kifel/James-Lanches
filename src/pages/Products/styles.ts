@@ -12,6 +12,8 @@ export const StyledPagination = styled(Pagination)`
   & .MuiPaginationItem-root {
     color: ${(props) => props.theme.colors.text};
   }
+  margin-top: 5rem;
+  margin-bottom: 5rem;
 `;
 
 export const SelectCategory = styled.select`
@@ -58,3 +60,7 @@ export const SearchProductBox = styled.input`
 
   transition: opacity 0.3s ease;
 `;
+
+export const ProductNotFound = styled.div`
+  height: 68vh;
+`

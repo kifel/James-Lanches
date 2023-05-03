@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import Footer from "../../../components/Footer";
 import Popup from "../../../components/Popup/Popup";
 import api from "../../../service/api";
-import { RecoveryContainer, RecoverySection } from "../styles";
+import { Button, RecoveryContainer, RecoverySection } from "../styles";
 
 interface Recovery {
   password?: string;
@@ -15,6 +15,7 @@ interface Recovery {
 const ConfirmCodePassword: React.FC = () => {
   const { token } = useParams();
   const [popup, setPopup] = React.useState(false);
+  const [loading, setLoading] = React.useState<boolean>(false);
   const navigate = useNavigate();
   const {
     handleSubmit,
@@ -23,6 +24,7 @@ const ConfirmCodePassword: React.FC = () => {
   } = useForm<Recovery>();
 
   const onSubmit = (data: Recovery) => {
+    setLoading(true);
     api
       .post(`/password-recovery/reset?token=${token}&password=${data.password}`)
       .then((response) => {
@@ -31,6 +33,9 @@ const ConfirmCodePassword: React.FC = () => {
       })
       .catch((err) => {
         setPopup(true);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -108,12 +113,14 @@ const ConfirmCodePassword: React.FC = () => {
                       )}
                     </div>
                     <div className="d-grid">
-                      <button
+                      <Button
                         type="submit"
-                        className="btn btn-lg btn-primary btn-login text-uppercase fw-bold mt-5"
+                        className="btn btn-lg btn-danger btn-login text-uppercase fw-bold mt-5"
+                        disabled={loading}
+                        loading={loading.toString()}
                       >
-                        Redefinir
-                      </button>
+                        {loading ? "" : "Redefinir"}
+                      </Button>
                     </div>
                   </div>
                 </form>

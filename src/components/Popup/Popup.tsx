@@ -7,7 +7,7 @@ const Popup: React.FC<PopupInterface> = (props) => {
     <PopupContainer>
       <PopupInner>
         <CloseButton className="btn" onClick={() => props.setTrigger(false)}>
-          <i className="fa fa-times"></i>
+          <i className="bi bi-x"></i>
         </CloseButton>
         {props.children}
       </PopupInner>
