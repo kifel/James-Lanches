@@ -95,8 +95,7 @@ type ButtonProps = {
 };
 
 export const ButtonLoading = styled.button<ButtonProps>`
-  background: ${({ loading }) =>
-    loading === "true" ? "#ccc" : "red"};
+  background: ${({ loading }) => (loading === "true" ? "#ccc" : "red")};
   color: ${({ loading }) => (loading === "true" ? "#333" : "#fff")};
   cursor: ${({ loading }) => (loading === "true" ? "not-allowed" : "pointer")};
   position: relative;
@@ -120,4 +119,11 @@ export const ButtonLoading = styled.button<ButtonProps>`
     left: 50%;
     transform: translate(-50%, -50%);
   }
+`;
+
+export const PreviewImage = styled.img`
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
 `;

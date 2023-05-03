@@ -11,6 +11,7 @@ import {
   Card,
   ImageOverlay,
   ImageWrapper,
+  PreviewImage,
 } from "./styles";
 
 const UserSettings: React.FC = () => {
@@ -25,6 +26,9 @@ const UserSettings: React.FC = () => {
   const [updateProfile, setUpdateProfile] = useState<Boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+  const [fileSizeError, setFileSizeError] = useState(false);
+
+  const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
 
   useEffect(() => {
     api
@@ -52,6 +56,12 @@ const UserSettings: React.FC = () => {
     const file = event.target?.files?.[0]; // add a check for null or undefined
 
     if (file) {
+      if (!file.type.startsWith("image/")) {
+        toast.error("Apenas imagens são permitidas.");
+        handleClearImage();
+        return;
+      }
+
       const reader = new FileReader();
       reader.onload = (e) => {
         setImagePreview(e.target?.result as string); // add a check for null or undefined
@@ -60,12 +70,14 @@ const UserSettings: React.FC = () => {
       const formData = new FormData();
       formData.append("file", file);
       setImage(formData);
+      setFileSizeError(file.size > MAX_FILE_SIZE);
     }
   };
 
   const handleSubmitImage = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (image) {
+
+    if (image && !fileSizeError) {
       setLoading(true);
       api
         .put("/users/update/image", image, {
@@ -88,6 +100,10 @@ const UserSettings: React.FC = () => {
           setPopup(!popup);
           setUpdateProfile(!updateProfile);
         });
+    }
+
+    if (fileSizeError) {
+      toast.error("Tamanho Máximo de arquivo: 5MB");
     }
   };
 
@@ -118,12 +134,22 @@ const UserSettings: React.FC = () => {
                 <div className="row">
                   <div className="col-4 mt-5">
                     <ImageWrapper>
-                      <img
-                        src={data?.imageUrl}
-                        alt="User picture"
-                        className="rounded-circle"
-                        style={{ width: 120, height: 120 }}
-                      />
+                      {isFetching ? (
+                        <div
+                          className="spinner-border"
+                          role="status"
+                          style={{ width: 120, height: 120 }}
+                        >
+                          <span className="sr-only"></span>
+                        </div>
+                      ) : (
+                        <img
+                          src={data?.imageUrl}
+                          alt="User picture"
+                          className="rounded-circle"
+                          style={{ width: 120, height: 120 }}
+                        />
+                      )}
                       <ImageOverlay>
                         <ButtonWrapper>
                           <Button onClick={() => setPopup(!popup)}>
@@ -159,19 +185,26 @@ const UserSettings: React.FC = () => {
               <input
                 className="form-control mt-3"
                 type="file"
+                accept="image/*"
+                max-size="5MB"
+                capture="user"
                 onChange={handleImageUpload}
                 ref={inputRef}
               />
               {imagePreview && (
                 <>
                   <p className="mt-5 text-center">PREVIEW</p>
-                  <img
-                    className="ms-5 rounded-circle"
-                    style={{ width: 120, height: 120 }}
+                  <PreviewImage
+                    className="ms-5"
                     src={imagePreview}
                     alt="Preview"
                   />
-                  <button className="btn btn-danger ms-5" onClick={handleClearImage}>Remover imagem</button>
+                  <button
+                    className="btn btn-danger ms-5"
+                    onClick={handleClearImage}
+                  >
+                    Remover imagem
+                  </button>
                 </>
               )}
             </div>
