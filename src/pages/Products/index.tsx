@@ -94,7 +94,6 @@ const Products: React.FC = () => {
             `/products/search?name=${buscar}&categoryName=${categoria}&isActive=true&page=${page}&size=12`
           )
           .then((response) => {
-            console.log(response.data);
             setData(response.data);
           })
           .catch((err) => {
@@ -171,6 +170,7 @@ const Products: React.FC = () => {
             <SelectCategory
               className="form-select"
               aria-label="Default select example"
+              value={categoria}
               onChange={(e) =>
                 setSearchParams(
                   { categoria: e.target.value, buscar },
