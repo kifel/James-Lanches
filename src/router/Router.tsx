@@ -12,6 +12,7 @@ import RecoveryPassword from "../pages/RecoveryPassword";
 import ConfirmCodePassword from "../pages/RecoveryPassword/ConfirmCodePassword";
 import Register from "../pages/Register";
 import ConfirmAccount from "../pages/Register/ConfirmAccount";
+import UserSettings from "../pages/UserSettings";
 import {
   isAuthenticated,
   isAuthenticatedAdmin,
@@ -45,6 +46,9 @@ export const pathsRoutesNavbarContent: RoutesPath[] = [
   },
   {
     path: "/products/show/:id",
+  },
+  {
+    path: "/settings",
   },
   // Adicione outras rotas aqui
 ];
@@ -192,6 +196,14 @@ export function Router() {
         element={
           <PrivateRoute>
             <Orders />
+          </PrivateRoute>
+        }
+      />
+       <Route
+        path="/settings"
+        element={
+          <PrivateRoute>
+            <UserSettings />
           </PrivateRoute>
         }
       />

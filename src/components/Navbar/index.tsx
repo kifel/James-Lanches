@@ -426,7 +426,7 @@ const Navbar: React.FC<Props> = ({ toggleTheme }) => {
       const firstPart = parts[1];
       const capitalizedFirstPart =
         firstPart.charAt(0).toUpperCase() + firstPart.slice(1);
-      newTitle = `${capitalizedFirstPart} James Lanches`;
+      newTitle = `${capitalizedFirstPart} - James Lanches`;
     }
 
     document.title = newTitle;
