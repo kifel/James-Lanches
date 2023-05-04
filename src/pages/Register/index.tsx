@@ -195,7 +195,7 @@ const Register: React.FC = () => {
                             className="form-control form-control-lg"
                             placeholder="Nova senha"
                             {...register("confirm_password", {
-                              required: true,
+                              required: "Você deve especificar uma senha",
                               validate: (val: any, values: Register) => {
                                 if (values.password === val) {
                                   return true;

@@ -11,6 +11,7 @@ export interface Data {
     }
   ];
   username: string;
+  telefone: string;
 }
 
 export interface PopupInterface {

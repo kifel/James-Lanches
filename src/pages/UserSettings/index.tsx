@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Data } from "../../@types/globalTypes";
@@ -13,8 +14,17 @@ import {
   IconUpload,
   ImageDropzone,
   ImageOverlay,
-  ImageWrapper
+  ImageWrapper,
 } from "./styles";
+
+interface UpdateUser {
+  username: string;
+  name: string;
+  email: string;
+  password: string;
+  telefone: string;
+  confirm_password?: string;
+}
 
 const UserSettings: React.FC = () => {
   const [popup, setPopup] = React.useState(false);
@@ -27,10 +37,32 @@ const UserSettings: React.FC = () => {
   const [error, setError] = useState(null);
   const [updateProfile, setUpdateProfile] = useState<Boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [updating, setUpdating] = React.useState<boolean>(false);
   const navigate = useNavigate();
   const [fileSizeError, setFileSizeError] = useState(false);
 
-  const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+  const MAX_FILE_SIZE = 4.5 * 1024 * 1024; // 5 MB
+
+  const {
+    handleSubmit,
+    register,
+    setValue,
+    formState: { errors },
+  } = useForm<UpdateUser>({
+    defaultValues: {
+      email: "",
+      name: "",
+      username: "",
+      telefone: "",
+    },
+  });
+
+  useEffect(() => {
+    setValue("email", data?.email ?? "");
+    setValue("name", data?.name ?? "");
+    setValue("username", data?.username ?? "");
+    setValue("telefone", data?.telefone ?? "");
+  }, [data, setValue]);
 
   useEffect(() => {
     api
@@ -53,6 +85,31 @@ const UserSettings: React.FC = () => {
   useEffect(() => {
     setImagePreview("");
   }, [popup]);
+
+  const onSubmit = (data: UpdateUser) => {
+    setUpdating(true);
+    api
+      .put("/users/update", {
+        name: data.name,
+        username: data.username,
+        password: data.password,
+        telefone: data.telefone,
+      })
+      .then((request) => {
+        toast.success("Cadastro alterado com sucesso !");
+      })
+      .catch((err) => {
+        if (err.message === "Failed to refresh token") {
+          localStorage.removeItem("user");
+          navigate("/login");
+        }
+        toast.error(err.response.data.errors[0]);
+      })
+      .finally(() => {
+        setUpdating(false);
+        setUpdateProfile(!updateProfile);
+      });
+  };
 
   function createFileList(file: File): FileList {
     const fileList = new DataTransfer();
@@ -138,7 +195,7 @@ const UserSettings: React.FC = () => {
     }
 
     if (fileSizeError) {
-      toast.error("Tamanho Máximo de arquivo: 5MB");
+      toast.error("Tamanho Máximo de arquivo: 4.5MB");
     }
   };
 
@@ -152,7 +209,7 @@ const UserSettings: React.FC = () => {
 
   return (
     <>
-      <div className="container-fluid bg-danger">
+      <div className="container-fluid bg-danger"style={{ height: "20rem" }}>
         <div className="container">
           <div className="row">
             <div className="col-12 mt-5 mb-5">
@@ -164,10 +221,10 @@ const UserSettings: React.FC = () => {
       <div className="container">
         <div className="row">
           <div className="col-12">
-            <Card className="card" style={{ height: "35rem" }}>
+            <Card className="card">
               <div className="container">
                 <div className="row">
-                  <div className="col-4 mt-5">
+                  <div className="col-12 col-sm-4 mt-5">
                     <ImageWrapper>
                       {isFetching ? (
                         <div
@@ -196,12 +253,168 @@ const UserSettings: React.FC = () => {
                           </Button>
                         </ButtonWrapper>
                       </ImageOverlay>
-                      <h3 className="card-title mt-3">{data?.name}</h3>
-                      <p className="card-text">{data?.username}</p>
                     </ImageWrapper>
+                    <div className="ms-5">
+                      <h3 className="ms-5 mt-3">{data?.name}</h3>
+                      <p className="ms-5 card-text">{data?.username}</p>
+                    </div>
                   </div>
-                  <div className="col-7 mt-5">
+                  <div className="col-12 col-sm-7 mt-5">
                     <h3>Account Settings</h3>
+                    <div className="form-outline mb-4">
+                      <form onSubmit={handleSubmit(onSubmit)}>
+                        <label className="form-label" htmlFor="typeName">
+                          Nome:<span style={{ color: "red" }}>*</span>
+                        </label>
+                        <input
+                          id="typeName"
+                          className="form-control form-control-lg"
+                          placeholder="Informe seu nome"
+                          {...register("name", {
+                            required: "Você deve especificar um nome",
+                          })}
+                        />
+                        {errors.name && (
+                          <p className="mt-2" style={{ color: "red" }}>
+                            {errors.name.message}
+                          </p>
+                        )}
+                        <div className="form-outline mb-4 mt-2">
+                          <label className="form-label" htmlFor="typeName">
+                            username:<span style={{ color: "red" }}>*</span>
+                          </label>
+                          <input
+                            id="typeUserName"
+                            className="form-control form-control-lg"
+                            placeholder="Informe seu nome"
+                            {...register("username", {
+                              required: "Você deve especificar um username",
+                            })}
+                          />
+                          {errors.username && (
+                            <p className="mt-2" style={{ color: "red" }}>
+                              {errors.username.message}
+                            </p>
+                          )}
+                        </div>
+                        <div className="form-outline mb-4">
+                          <label className="form-label" htmlFor="telefone-2">
+                            Telefone:<span style={{ color: "red" }}>*</span>
+                          </label>
+                          <input
+                            type="number"
+                            id="telefone-2"
+                            className="form-control form-control-lg"
+                            placeholder="Digite sua telefone"
+                            {...register("telefone", {
+                              required: "Você deve especificar um telefone",
+                            })}
+                          />
+                          {errors.telefone && (
+                            <p className="mt-2" style={{ color: "red" }}>
+                              {errors.telefone.message}
+                            </p>
+                          )}
+                        </div>
+                        <div className="form-outline mb-4">
+                          <label className="form-label" htmlFor="typeEmail">
+                            Email:
+                          </label>
+                          <input
+                            id="typeEmail"
+                            className="form-control form-control-lg"
+                            placeholder="Informe seu email"
+                            disabled
+                            {...register("email", {
+                              required: "Você deve especificar um email",
+                              pattern: {
+                                value:
+                                  /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                message: "Endereço de email invalido",
+                              },
+                            })}
+                          />
+                          {errors.email && (
+                            <p className="mt-2" style={{ color: "red" }}>
+                              {errors.email.message}
+                            </p>
+                          )}
+                        </div>
+                        <div className="row">
+                          <div className="col-6">
+                            <div className="form-outline mb-4">
+                              <label
+                                className="form-label"
+                                htmlFor="typePasswordX-2"
+                              >
+                                Senha:<span style={{ color: "red" }}>*</span>
+                              </label>
+                              <input
+                                type="password"
+                                id="typePasswordX-2"
+                                className="form-control form-control-lg"
+                                placeholder="Digite sua senha"
+                                {...register("password", {
+                                  required: "Você deve especificar uma senha",
+                                  minLength: {
+                                    value: 8,
+                                    message:
+                                      "A senha deve conter pelo menos 8 caracteres",
+                                  },
+                                })}
+                              />
+                              {errors.password && (
+                                <p className="mt-2" style={{ color: "red" }}>
+                                  {errors.password.message}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                          <div className="col-6">
+                            <div className="form-outline mb-4">
+                              <label
+                                className="form-label"
+                                htmlFor="typeEmailX-1"
+                              >
+                                Confirme a senha:
+                                <span style={{ color: "red" }}>*</span>
+                              </label>
+                              <input
+                                type="password"
+                                id="typeEmailX-1"
+                                className="form-control form-control-lg"
+                                placeholder="Nova senha"
+                                {...register("confirm_password", {
+                                  required: "Você deve especificar uma senha",
+                                  validate: (val: any, values: UpdateUser) => {
+                                    if (values.password === val) {
+                                      return true;
+                                    } else {
+                                      return "Suas senhas não coincidem";
+                                    }
+                                  },
+                                })}
+                              />
+                              {errors.confirm_password && (
+                                <p className="mt-2" style={{ color: "red" }}>
+                                  {errors.confirm_password.message}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                          <div className="d-grid">
+                            <ButtonLoading
+                              type="submit"
+                              className="btn btn-lg btn-danger btn-login text-uppercase fw-bold mt-5"
+                              disabled={updating}
+                              loading={updating.toString()}
+                            >
+                              {updating ? "" : "Atualizar"}
+                            </ButtonLoading>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -217,7 +430,8 @@ const UserSettings: React.FC = () => {
         <form onSubmit={handleSubmitImage}>
           <div className="row">
             <div className="col-12">
-              <Dropzone onClick={() => inputRef.current?.click()}
+              <Dropzone
+                onClick={() => inputRef.current?.click()}
                 onDragOver={(e) => {
                   e.preventDefault();
                 }}
@@ -234,7 +448,6 @@ const UserSettings: React.FC = () => {
                     <IconUpload className="bi bi-cloud-arrow-up-fill me-3"></IconUpload>
                     Arraste e solte a imagem aqui
                   </p>
-                  
                 )}
               </Dropzone>
               <div className="d-flex justify-content-center align-items-center">
@@ -252,7 +465,7 @@ const UserSettings: React.FC = () => {
                     <button
                       className="btn btn-danger ms-3 mt-3"
                       onClick={handleClearImage}
-                      style={{width: '50%', height: '40px'}}	
+                      style={{ width: "50%", height: "40px" }}
                     >
                       Remover
                     </button>

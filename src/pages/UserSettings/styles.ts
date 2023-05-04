@@ -2,13 +2,17 @@ import { shade } from "polished";
 import styled, { keyframes } from "styled-components";
 
 export const Card = styled.div`
-  margin-top: -2rem;
+  margin-top: -10rem;
   color: ${(props) => props.theme.colors.text};
   text-decoration: none;
   box-shadow: ${(props) => shade(0.19, props.theme.colors.background)} 0px 10px
       20px,
     ${(props) => shade(0.23, props.theme.colors.background)} 0px 6px 6px;
   background: ${(props) => props.theme.colors.backgroundNavbar};
+  height: 45rem;
+  @media (max-width: 575px) {
+    height: 60rem;
+  }
 `;
 
 export const ImageWrapper = styled.div`
@@ -133,8 +137,8 @@ export const Dropzone = styled.div`
 `;
 
 export const IconUpload = styled.i`
- color: ${(props) => props.theme.colors.primary};
-`
+  color: ${(props) => props.theme.colors.primary};
+`;
 
 export const ImageDropzone = styled.img`
   height: 290px;
