@@ -1,3 +1,4 @@
+import { shade } from "polished";
 import styled, { keyframes } from "styled-components";
 
 export const LogionSection = styled.section`
@@ -35,8 +36,7 @@ type ButtonProps = {
 };
 
 export const Button = styled.button<ButtonProps>`
-  background: ${({ loading }) =>
-    loading === "true" ? "#ccc" : "red"};
+  background: ${({ loading }) => (loading === "true" ? "#ccc" : "red")};
   color: ${({ loading }) => (loading === "true" ? "#333" : "#fff")};
   cursor: ${({ loading }) => (loading === "true" ? "not-allowed" : "pointer")};
   position: relative;
@@ -59,5 +59,21 @@ export const Button = styled.button<ButtonProps>`
     position: absolute;
     left: 50%;
     transform: translate(-50%, -50%);
+  }
+`;
+
+export const EyeButton = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: ${(props) => props.theme.colors.primary};
+  border-radius: 2px;
+  background: ${shade(0.1, "#FFFF")};
+  height: 3rem;
+  width: 100%;
+
+  &:hover {
+    color: ${(props) => props.theme.colors.secondary};
+    background: ${shade(0.2, "#FFFF")};
   }
 `;

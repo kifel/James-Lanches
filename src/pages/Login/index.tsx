@@ -1,11 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Footer from "../../components/Footer";
 import { useAuth } from "../../context/AuthProvider/useAuth";
 import api from "../../service/api";
-import { Button, Buttons, ButtonsRows, LoginContainer, LogionSection } from "./styles";
+import {
+  Button,
+  Buttons,
+  ButtonsRows,
+  EyeButton,
+  LoginContainer,
+  LogionSection,
+} from "./styles";
 
 interface login {
   username: string;
@@ -16,11 +23,25 @@ const Login: React.FC = () => {
   const auth = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
+  const [passwordView, setPasswordView] = useState<boolean>(false);
+  const [passwordIcon, setPasswordIcon] = useState<string>("bi bi-eye");
+  const [passwordInputType, setPasswordInputType] = useState<string>("password");
+
   const {
     handleSubmit,
     register,
     formState: { errors },
   } = useForm<login>();
+
+  useEffect(() => {
+    if (passwordView) {
+      setPasswordIcon("bi bi-eye-slash");
+      setPasswordInputType("");
+    } else {
+      setPasswordIcon("bi bi-eye");
+      setPasswordInputType("password");
+    }
+  }, [passwordView]);
 
   const onSubmit = (data: login) => {
     setLoading(true);
@@ -83,15 +104,25 @@ const Login: React.FC = () => {
                       <label className="form-label" htmlFor="typePasswordX-2">
                         Senha:<span style={{ color: "red" }}>*</span>
                       </label>
-                      <input
-                        type="password"
-                        id="typePasswordX-2"
-                        className="form-control form-control-lg"
-                        placeholder="Digite sua senha"
-                        {...register("password", {
-                          required: true,
-                        })}
-                      />
+                      <div className="input-group">
+                        <input
+                          type={passwordInputType}
+                          id="typePasswordX-2"
+                          className="form-control form-control-lg"
+                          placeholder="Digite sua senha"
+                          {...register("password", {
+                            required: true,
+                          })}
+                        />
+                        <div className="input-group-addon">
+                          <EyeButton
+                            className="btn"
+                            onClick={() => setPasswordView(!passwordView)}
+                          >
+                            <i className={passwordIcon}></i>
+                          </EyeButton>
+                        </div>
+                      </div>
                       {errors?.password?.type === "required" && (
                         <p
                           className="mt-1"
@@ -107,8 +138,8 @@ const Login: React.FC = () => {
                         className="btn btn-lg btn-danger btn-login text-uppercase fw-bold mt-5"
                         disabled={loading}
                         loading={loading.toString()}
-                        >
-                           {loading ? "" : "Entrar"}
+                      >
+                        {loading ? "" : "Entrar"}
                       </Button>
                     </div>
                     <div className="container">
