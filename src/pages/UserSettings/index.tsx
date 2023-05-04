@@ -7,7 +7,10 @@ import Popup from "../../components/Popup/Popup";
 import api from "../../service/api";
 import {
   Button,
+  ButtonCancelEdit,
+  ButtonEdit,
   ButtonLoading,
+  ButtonOptionsData,
   ButtonWrapper,
   Card,
   Dropzone,
@@ -15,6 +18,7 @@ import {
   ImageDropzone,
   ImageOverlay,
   ImageWrapper,
+  RedBackground,
 } from "./styles";
 
 interface UpdateUser {
@@ -40,6 +44,12 @@ const UserSettings: React.FC = () => {
   const [updating, setUpdating] = React.useState<boolean>(false);
   const navigate = useNavigate();
   const [fileSizeError, setFileSizeError] = useState(false);
+  const [menuOption, setMenuOption] = useState<string>("dados");
+  const [dataMenu, setDataMenu] = useState<string>("");
+  const [emailMenu, setEmailMenu] = useState<string>("");
+  const [senhasMenu, setSenhasMenu] = useState<string>("");
+  const [apconectMenu, setApconectMenu] = useState<string>("");
+  const [editInput, setEditInput] = useState<boolean>(true);
 
   const MAX_FILE_SIZE = 4.5 * 1024 * 1024; // 5 MB
 
@@ -56,6 +66,33 @@ const UserSettings: React.FC = () => {
       telefone: "",
     },
   });
+
+  useEffect(() => {
+    if (menuOption === "dados") {
+      setDataMenu("true");
+      setEmailMenu("false");
+      setSenhasMenu("false");
+      setApconectMenu("false");
+    }
+    if (menuOption === "email") {
+      setDataMenu("false");
+      setEmailMenu("true");
+      setSenhasMenu("false");
+      setApconectMenu("false");
+    }
+    if (menuOption === "senhas") {
+      setDataMenu("false");
+      setEmailMenu("false");
+      setSenhasMenu("true");
+      setApconectMenu("false");
+    }
+    if (menuOption === "apconect") {
+      setDataMenu("false");
+      setEmailMenu("false");
+      setSenhasMenu("false");
+      setApconectMenu("true");
+    }
+  }, [menuOption]);
 
   useEffect(() => {
     setValue("email", data?.email ?? "");
@@ -108,6 +145,7 @@ const UserSettings: React.FC = () => {
       .finally(() => {
         setUpdating(false);
         setUpdateProfile(!updateProfile);
+        setEditInput(!editInput);
       });
   };
 
@@ -207,17 +245,229 @@ const UserSettings: React.FC = () => {
     }
   };
 
-  return (
-    <>
-      <div className="container-fluid bg-danger"style={{ height: "20rem" }}>
-        <div className="container">
-          <div className="row">
-            <div className="col-12 mt-5 mb-5">
-              <h1 style={{ color: "white" }}>Account Settings</h1>
+  const closeEditMenu = () => {
+    setEditInput(!editInput);
+    setUpdateProfile(!updateProfile);
+  };
+
+  const dataMenuContent = () => {
+    return (
+      <div className="col-12 col-sm-7 mt-5">
+        <div className="d-flex justify-content-between align-items-center">
+          <h3>Account Settings</h3>
+          {editInput ? (
+            <ButtonEdit
+              onClick={() => setEditInput(!editInput)}
+              className="btn"
+              style={{ fontSize: 20 }}
+            >
+              <i
+                className="bi bi-pencil-square me-2"
+                style={{ color: "red" }}
+              ></i>
+              Editar
+            </ButtonEdit>
+          ) : (
+            ""
+          )}
+        </div>
+        <div className="form-outline mb-4 mt-2">
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <label className="form-label" htmlFor="typeName">
+              Nome:<span style={{ color: "red" }}>*</span>
+            </label>
+            <input
+              id="typeName"
+              disabled={editInput}
+              className="form-control form-control-lg"
+              placeholder="Informe seu nome"
+              {...register("name", {
+                required: "Você deve especificar um nome",
+              })}
+            />
+            {errors.name && (
+              <p className="mt-2" style={{ color: "red" }}>
+                {errors.name.message}
+              </p>
+            )}
+            <div className="form-outline mb-4 mt-2">
+              <label className="form-label" htmlFor="typeName">
+                username:<span style={{ color: "red" }}>*</span>
+              </label>
+              <input
+                id="typeUserName"
+                className="form-control form-control-lg"
+                placeholder="Informe seu nome"
+                disabled={editInput}
+                {...register("username", {
+                  required: "Você deve especificar um username",
+                })}
+              />
+              {errors.username && (
+                <p className="mt-2" style={{ color: "red" }}>
+                  {errors.username.message}
+                </p>
+              )}
+            </div>
+            <div className="form-outline mb-4">
+              <label className="form-label" htmlFor="telefone-2">
+                Telefone:<span style={{ color: "red" }}>*</span>
+              </label>
+              <input
+                type="number"
+                id="telefone-2"
+                disabled={editInput}
+                className="form-control form-control-lg"
+                placeholder="Digite sua telefone"
+                {...register("telefone", {
+                  required: "Você deve especificar um telefone",
+                })}
+              />
+              {errors.telefone && (
+                <p className="mt-2" style={{ color: "red" }}>
+                  {errors.telefone.message}
+                </p>
+              )}
+            </div>
+            <div className="form-outline mb-4">
+              <label className="form-label" htmlFor="typeEmail">
+                Email:
+              </label>
+              <input
+                id="typeEmail"
+                className="form-control form-control-lg"
+                placeholder="Informe seu email"
+                disabled
+                {...register("email", {
+                  required: "Você deve especificar um email",
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: "Endereço de email invalido",
+                  },
+                })}
+              />
+              {errors.email && (
+                <p className="mt-2" style={{ color: "red" }}>
+                  {errors.email.message}
+                </p>
+              )}
+            </div>
+            {editInput ? (
+              <></>
+            ) : (
+              <div className="row">
+                <div className="col-6">
+                  <ButtonLoading
+                    type="submit"
+                    className="btn btn-danger text-uppercase fw-bold mt-5"
+                    disabled={updating}
+                    loading={updating.toString()}
+                  >
+                    {updating ? "" : "Atualizar"}
+                  </ButtonLoading>
+                </div>
+                <div className="col-6">
+                  <ButtonCancelEdit
+                    className="btn btn-danger text-uppercase fw-bold mt-5"
+                    onClick={closeEditMenu}
+                  >
+                    Cancelar
+                  </ButtonCancelEdit>
+                </div>
+              </div>
+            )}
+          </form>
+        </div>
+      </div>
+    );
+  };
+
+  const emailMenuContent = () => {
+    return (
+      <div className="col-12 col-sm-7 mt-5">
+        <h3>Account Settings</h3>
+        <p>EMAIL</p>
+      </div>
+    );
+  };
+
+  const senhasMenuContent = () => {
+    return (
+      <div className="col-12 col-sm-7 mt-5">
+        <h3>Account Settings</h3>
+        <p>Senhas</p>
+        <div className="row">
+          <div className="col-6">
+            <div className="form-outline mb-4">
+              <label className="form-label" htmlFor="typePasswordX-2">
+                Senha:<span style={{ color: "red" }}>*</span>
+              </label>
+              <input
+                type="password"
+                id="typePasswordX-2"
+                className="form-control form-control-lg"
+                placeholder="Digite sua senha"
+                {...register("password", {
+                  required: "Você deve especificar uma senha",
+                  minLength: {
+                    value: 8,
+                    message: "A senha deve conter pelo menos 8 caracteres",
+                  },
+                })}
+              />
+              {errors.password && (
+                <p className="mt-2" style={{ color: "red" }}>
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
+          </div>
+          <div className="col-6">
+            <div className="form-outline mb-4">
+              <label className="form-label" htmlFor="typeEmailX-1">
+                Confirme a senha:
+                <span style={{ color: "red" }}>*</span>
+              </label>
+              <input
+                type="password"
+                id="typeEmailX-1"
+                className="form-control form-control-lg"
+                placeholder="Nova senha"
+                {...register("confirm_password", {
+                  required: "Você deve especificar uma senha",
+                  validate: (val: any, values: UpdateUser) => {
+                    if (values.password === val) {
+                      return true;
+                    } else {
+                      return "Suas senhas não coincidem";
+                    }
+                  },
+                })}
+              />
+              {errors.confirm_password && (
+                <p className="mt-2" style={{ color: "red" }}>
+                  {errors.confirm_password.message}
+                </p>
+              )}
             </div>
           </div>
         </div>
       </div>
+    );
+  };
+
+  const apconectMenuContent = () => {
+    return (
+      <div className="col-12 col-sm-7 mt-5">
+        <h3>Account Settings</h3>
+        <p>Aparelhos conectados</p>
+      </div>
+    );
+  };
+
+  return (
+    <>
+      <RedBackground className="container-fluid" />
       <div className="container">
         <div className="row">
           <div className="col-12">
@@ -258,164 +508,53 @@ const UserSettings: React.FC = () => {
                       <h3 className="ms-5 mt-3">{data?.name}</h3>
                       <p className="ms-5 card-text">{data?.username}</p>
                     </div>
-                  </div>
-                  <div className="col-12 col-sm-7 mt-5">
-                    <h3>Account Settings</h3>
-                    <div className="form-outline mb-4">
-                      <form onSubmit={handleSubmit(onSubmit)}>
-                        <label className="form-label" htmlFor="typeName">
-                          Nome:<span style={{ color: "red" }}>*</span>
-                        </label>
-                        <input
-                          id="typeName"
-                          className="form-control form-control-lg"
-                          placeholder="Informe seu nome"
-                          {...register("name", {
-                            required: "Você deve especificar um nome",
-                          })}
-                        />
-                        {errors.name && (
-                          <p className="mt-2" style={{ color: "red" }}>
-                            {errors.name.message}
-                          </p>
-                        )}
-                        <div className="form-outline mb-4 mt-2">
-                          <label className="form-label" htmlFor="typeName">
-                            username:<span style={{ color: "red" }}>*</span>
-                          </label>
-                          <input
-                            id="typeUserName"
-                            className="form-control form-control-lg"
-                            placeholder="Informe seu nome"
-                            {...register("username", {
-                              required: "Você deve especificar um username",
-                            })}
-                          />
-                          {errors.username && (
-                            <p className="mt-2" style={{ color: "red" }}>
-                              {errors.username.message}
-                            </p>
-                          )}
-                        </div>
-                        <div className="form-outline mb-4">
-                          <label className="form-label" htmlFor="telefone-2">
-                            Telefone:<span style={{ color: "red" }}>*</span>
-                          </label>
-                          <input
-                            type="number"
-                            id="telefone-2"
-                            className="form-control form-control-lg"
-                            placeholder="Digite sua telefone"
-                            {...register("telefone", {
-                              required: "Você deve especificar um telefone",
-                            })}
-                          />
-                          {errors.telefone && (
-                            <p className="mt-2" style={{ color: "red" }}>
-                              {errors.telefone.message}
-                            </p>
-                          )}
-                        </div>
-                        <div className="form-outline mb-4">
-                          <label className="form-label" htmlFor="typeEmail">
-                            Email:
-                          </label>
-                          <input
-                            id="typeEmail"
-                            className="form-control form-control-lg"
-                            placeholder="Informe seu email"
-                            disabled
-                            {...register("email", {
-                              required: "Você deve especificar um email",
-                              pattern: {
-                                value:
-                                  /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                message: "Endereço de email invalido",
-                              },
-                            })}
-                          />
-                          {errors.email && (
-                            <p className="mt-2" style={{ color: "red" }}>
-                              {errors.email.message}
-                            </p>
-                          )}
-                        </div>
-                        <div className="row">
-                          <div className="col-6">
-                            <div className="form-outline mb-4">
-                              <label
-                                className="form-label"
-                                htmlFor="typePasswordX-2"
-                              >
-                                Senha:<span style={{ color: "red" }}>*</span>
-                              </label>
-                              <input
-                                type="password"
-                                id="typePasswordX-2"
-                                className="form-control form-control-lg"
-                                placeholder="Digite sua senha"
-                                {...register("password", {
-                                  required: "Você deve especificar uma senha",
-                                  minLength: {
-                                    value: 8,
-                                    message:
-                                      "A senha deve conter pelo menos 8 caracteres",
-                                  },
-                                })}
-                              />
-                              {errors.password && (
-                                <p className="mt-2" style={{ color: "red" }}>
-                                  {errors.password.message}
-                                </p>
-                              )}
-                            </div>
-                          </div>
-                          <div className="col-6">
-                            <div className="form-outline mb-4">
-                              <label
-                                className="form-label"
-                                htmlFor="typeEmailX-1"
-                              >
-                                Confirme a senha:
-                                <span style={{ color: "red" }}>*</span>
-                              </label>
-                              <input
-                                type="password"
-                                id="typeEmailX-1"
-                                className="form-control form-control-lg"
-                                placeholder="Nova senha"
-                                {...register("confirm_password", {
-                                  required: "Você deve especificar uma senha",
-                                  validate: (val: any, values: UpdateUser) => {
-                                    if (values.password === val) {
-                                      return true;
-                                    } else {
-                                      return "Suas senhas não coincidem";
-                                    }
-                                  },
-                                })}
-                              />
-                              {errors.confirm_password && (
-                                <p className="mt-2" style={{ color: "red" }}>
-                                  {errors.confirm_password.message}
-                                </p>
-                              )}
-                            </div>
-                          </div>
-                          <div className="d-grid">
-                            <ButtonLoading
-                              type="submit"
-                              className="btn btn-lg btn-danger btn-login text-uppercase fw-bold mt-5"
-                              disabled={updating}
-                              loading={updating.toString()}
-                            >
-                              {updating ? "" : "Atualizar"}
-                            </ButtonLoading>
-                          </div>
-                        </div>
-                      </form>
+                    <div className="container mt-5">
+                      <div className="row mt-5 d-flex justify-content-center">
+                        <ButtonOptionsData
+                          isactive={dataMenu}
+                          className="btn col-12 mt-2"
+                          onClick={() => setMenuOption("dados")}
+                        >
+                          Dados
+                        </ButtonOptionsData>
+                        <ButtonOptionsData
+                          isactive={emailMenu}
+                          className="btn col-12 mt-2"
+                          onClick={() => setMenuOption("email")}
+                        >
+                          Email
+                        </ButtonOptionsData>
+                        <ButtonOptionsData
+                          isactive={senhasMenu}
+                          className="btn col-12 mt-2"
+                          onClick={() => setMenuOption("senhas")}
+                        >
+                          Senhas
+                        </ButtonOptionsData>
+                        <ButtonOptionsData
+                          isactive={apconectMenu}
+                          className="btn col-12 mt-2"
+                          onClick={() => setMenuOption("apconect")}
+                        >
+                          Aparelhos Conectados
+                        </ButtonOptionsData>
+                      </div>
                     </div>
                   </div>
+                  {(() => {
+                    if (dataMenu === "true") {
+                      return dataMenuContent();
+                    }
+                    if (emailMenu === "true") {
+                      return emailMenuContent();
+                    }
+                    if (senhasMenu === "true") {
+                      return senhasMenuContent();
+                    }
+                    if (apconectMenu === "true") {
+                      return apconectMenuContent();
+                    }
+                  })()}
                 </div>
               </div>
             </Card>
@@ -456,7 +595,6 @@ const UserSettings: React.FC = () => {
                   type="file"
                   accept="image/*"
                   max-size="5MB"
-                  capture="environment"
                   onChange={handleImageUpload}
                   ref={inputRef}
                 />

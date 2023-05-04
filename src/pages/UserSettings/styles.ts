@@ -1,17 +1,26 @@
 import { shade } from "polished";
 import styled, { keyframes } from "styled-components";
 
+interface Props {
+  isactive: string;
+}
+
+export const RedBackground = styled.div`
+  background-color: ${(props) => props.theme.colors.primary};
+  height: 20rem;
+`;
+
 export const Card = styled.div`
-  margin-top: -10rem;
+  margin-top: -17rem;
   color: ${(props) => props.theme.colors.text};
   text-decoration: none;
   box-shadow: ${(props) => shade(0.19, props.theme.colors.background)} 0px 10px
       20px,
     ${(props) => shade(0.23, props.theme.colors.background)} 0px 6px 6px;
   background: ${(props) => props.theme.colors.backgroundNavbar};
-  height: 45rem;
+  height: 43rem;
   @media (max-width: 575px) {
-    height: 60rem;
+    height: 72rem;
   }
 `;
 
@@ -125,6 +134,17 @@ export const ButtonLoading = styled.button<ButtonProps>`
   }
 `;
 
+export const ButtonCancelEdit = styled.button`
+  background: red;
+  position: relative;
+  width: 100%;
+  height: 3em;
+
+  &:hover {
+    background: ${(props) => props.theme.colors.tertiary};
+  }
+`;
+
 export const Dropzone = styled.div`
   display: flex;
   justify-content: center;
@@ -145,3 +165,28 @@ export const ImageDropzone = styled.img`
   width: 90%;
   object-fit: contain;
 `;
+
+export const ButtonOptionsData = styled.button<Props>`
+  color: ${(props) =>
+    props.isactive == "true"
+      ? props.theme.colors.secondary
+      : props.theme.colors.text};
+  border-bottom: 1px solid;
+  border-radius: 0px;
+  width: 85%;
+
+  &:hover {
+    color: #ffff;
+    border-bottom: 1px solid;
+    border-radius: 0px;
+    background: ${(props) => props.theme.colors.primary};
+  }
+  &:focus {
+    color: #ffff;
+    background: ${(props) => props.theme.colors.primary};
+  }
+`;
+
+export const ButtonEdit = styled.button`
+  color: ${(props) => props.theme.colors.text};
+`
