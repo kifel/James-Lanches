@@ -121,9 +121,23 @@ export const ButtonLoading = styled.button<ButtonProps>`
   }
 `;
 
-export const PreviewImage = styled.img`
-  border-radius: 50%;
-  width: 120px;
-  height: 120px;
-  object-fit: cover;
+export const Dropzone = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px dashed ${(props) => props.theme.colors.secondary};
+  height: 300px;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 5px;
+`;
+
+export const IconUpload = styled.i`
+ color: ${(props) => props.theme.colors.primary};
+`
+
+export const ImageDropzone = styled.img`
+  height: 290px;
+  width: 90%;
+  object-fit: contain;
 `;

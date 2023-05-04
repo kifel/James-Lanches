@@ -9,9 +9,11 @@ import {
   ButtonLoading,
   ButtonWrapper,
   Card,
+  Dropzone,
+  IconUpload,
+  ImageDropzone,
   ImageOverlay,
-  ImageWrapper,
-  PreviewImage,
+  ImageWrapper
 } from "./styles";
 
 const UserSettings: React.FC = () => {
@@ -51,6 +53,39 @@ const UserSettings: React.FC = () => {
   useEffect(() => {
     setImagePreview("");
   }, [popup]);
+
+  function createFileList(file: File): FileList {
+    const fileList = new DataTransfer();
+    fileList.items.add(file);
+    return fileList.files;
+  }
+
+  const handleDrop = (file: File) => {
+    if (file) {
+      if (!file.type.startsWith("image/")) {
+        toast.error("Apenas imagens são permitidas.");
+        handleClearImage();
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target?.result as string);
+      };
+
+      const fileList = createFileList(file); // cria um novo FileList com o arquivo que foi arrastado
+      const input = inputRef.current;
+      if (input) {
+        input.files = fileList; // substitui o valor do input pelo novo FileList
+      }
+
+      reader.readAsDataURL(file);
+      const formData = new FormData();
+      formData.append("file", file);
+      setImage(formData);
+      setFileSizeError(file.size > MAX_FILE_SIZE);
+    }
+  };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target?.files?.[0]; // add a check for null or undefined
@@ -182,42 +217,59 @@ const UserSettings: React.FC = () => {
         <form onSubmit={handleSubmitImage}>
           <div className="row">
             <div className="col-12">
-              <input
-                className="form-control mt-3"
-                type="file"
-                accept="image/*"
-                max-size="5MB"
-                capture="user"
-                onChange={handleImageUpload}
+              <Dropzone onClick={() => inputRef.current?.click()}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  handleDrop(e.dataTransfer.files[0]);
+                }}
                 ref={inputRef}
-              />
-              {imagePreview && (
-                <>
-                  <p className="mt-5 text-center">PREVIEW</p>
-                  <PreviewImage
-                    className="ms-5"
-                    src={imagePreview}
-                    alt="Preview"
-                  />
-                  <button
-                    className="btn btn-danger ms-5"
-                    onClick={handleClearImage}
-                  >
-                    Remover imagem
-                  </button>
-                </>
-              )}
-            </div>
-            <div className="col-12 mt-5">
-              <ButtonLoading
-                type="submit"
-                className="btn btn-danger"
-                disabled={loading}
-                loading={loading.toString()}
               >
-                {loading ? "" : "Enviar"}
-              </ButtonLoading>
+                {imagePreview ? (
+                  <ImageDropzone src={imagePreview} alt="Preview" />
+                ) : (
+                  <p style={{ fontSize: 20 }}>
+                    <IconUpload className="bi bi-cloud-arrow-up-fill me-3"></IconUpload>
+                    Arraste e solte a imagem aqui
+                  </p>
+                  
+                )}
+              </Dropzone>
+              <div className="d-flex justify-content-center align-items-center">
+                <input
+                  className="form-control mt-3 ms-3"
+                  type="file"
+                  accept="image/*"
+                  max-size="5MB"
+                  capture="environment"
+                  onChange={handleImageUpload}
+                  ref={inputRef}
+                />
+                {imagePreview && (
+                  <>
+                    <button
+                      className="btn btn-danger ms-3 mt-3"
+                      onClick={handleClearImage}
+                      style={{width: '50%', height: '40px'}}	
+                    >
+                      Remover
+                    </button>
+                  </>
+                )}
+              </div>
             </div>
+          </div>
+          <div className="col-12 mt-5">
+            <ButtonLoading
+              type="submit"
+              className="btn btn-danger"
+              disabled={loading}
+              loading={loading.toString()}
+            >
+              {loading ? "" : "Enviar"}
+            </ButtonLoading>
           </div>
         </form>
       </Popup>
