@@ -68,30 +68,33 @@ const UserSettings: React.FC = () => {
   });
 
   useEffect(() => {
-    if (menuOption === "dados") {
-      setDataMenu("true");
-      setEmailMenu("false");
-      setSenhasMenu("false");
-      setApconectMenu("false");
+    const setMenu = (option: string) => {
+      if (option === "dados") {
+        setDataMenu("true");
+        setEmailMenu("false");
+        setSenhasMenu("false");
+        setApconectMenu("false");
+      }
+      if (option === "email") {
+        setDataMenu("false");
+        setEmailMenu("true");
+        setSenhasMenu("false");
+        setApconectMenu("false");
+      }
+      if (option === "senhas") {
+        setDataMenu("false");
+        setEmailMenu("false");
+        setSenhasMenu("true");
+        setApconectMenu("false");
+      }
+      if (option === "apconect") {
+        setDataMenu("false");
+        setEmailMenu("false");
+        setSenhasMenu("false");
+        setApconectMenu("true");
+      }
     }
-    if (menuOption === "email") {
-      setDataMenu("false");
-      setEmailMenu("true");
-      setSenhasMenu("false");
-      setApconectMenu("false");
-    }
-    if (menuOption === "senhas") {
-      setDataMenu("false");
-      setEmailMenu("false");
-      setSenhasMenu("true");
-      setApconectMenu("false");
-    }
-    if (menuOption === "apconect") {
-      setDataMenu("false");
-      setEmailMenu("false");
-      setSenhasMenu("false");
-      setApconectMenu("true");
-    }
+    setMenu(menuOption);
   }, [menuOption]);
 
   useEffect(() => {
@@ -102,25 +105,33 @@ const UserSettings: React.FC = () => {
   }, [data, setValue]);
 
   useEffect(() => {
-    api
-      .get("/users/logged")
-      .then((response: any) => {
-        setData(response.data);
-      })
-      .catch((error: any) => {
-        if (error.message === "Failed to refresh token") {
-          localStorage.removeItem("user");
-          navigate("/login");
-        }
-        setError(error);
-      })
-      .finally(() => {
-        setIsFetching(false);
-      });
+    const fetchData = async () => {
+      await api
+        .get("/users/logged")
+        .then((response: any) => {
+          setData(response.data);
+        })
+        .catch((error: any) => {
+          if (error.message === "Failed to refresh token") {
+            localStorage.removeItem("user");
+            navigate("/login");
+          }
+          setError(error);
+        })
+        .finally(() => {
+          setIsFetching(false);
+        });
+    };
+
+    return () => {
+      fetchData();
+    };
   }, [updateProfile]);
 
   useEffect(() => {
-    setImagePreview("");
+    return () => {
+      setImagePreview("");
+    };
   }, [popup]);
 
   const onSubmit = (data: UpdateUser) => {

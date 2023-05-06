@@ -21,7 +21,7 @@ import {
   ThemeDropdown,
   ThemeList,
   UserLink,
-  UserList
+  UserList,
 } from "./styles";
 
 interface Props {
@@ -180,33 +180,41 @@ const ShowLoggedHeader = ({ toggleTheme, user }: PropsLogged) => {
   const theme = title === "light" ? true : false;
 
   useEffect(() => {
-    api
-      .get("/users/logged")
-      .then((response) => {
-        setData(response.data);
-      })
-      .catch((error) => {
-        if (error.message === "Failed to refresh token") {
-          localStorage.removeItem("user");
-          navigate("/login");
-        }
-        setError(error);
-      })
-      .finally(() => {
-        setIsFetching(false);
-      });
+    const loadingUser = async () => {
+      await api
+        .get("/users/logged")
+        .then((response) => {
+          setData(response.data);
+        })
+        .catch((error) => {
+          if (error.message === "Failed to refresh token") {
+            localStorage.removeItem("user");
+            navigate("/login");
+          }
+          setError(error);
+        })
+        .finally(() => {
+          setIsFetching(false);
+        });
+    };
+    return () => {
+      loadingUser();
+    };
   }, []);
 
   useEffect(() => {
-    if (data && data.roles && data.roles.length > 0) {
-      for (let i = 0; i < data.roles.length; i++) {
-        if (data.roles[i].name == "ROLE_ADMIN") {
-          setIsAdmin(true);
+    const loadingRoles = () => {
+      if (data && data.roles && data.roles.length > 0) {
+        for (let i = 0; i < data.roles.length; i++) {
+          if (data.roles[i].name == "ROLE_ADMIN") {
+            setIsAdmin(true);
+          }
         }
+      } else {
+        setIsAdmin(false);
       }
-    } else {
-      setIsAdmin(false);
-    }
+    };
+    loadingRoles();
   }, [data]);
 
   const logout = () => {
@@ -384,7 +392,9 @@ const ShowLoggedHeader = ({ toggleTheme, user }: PropsLogged) => {
                           Configuração
                         </UserLink>
                       </UserList>
-                      <li><hr className="dropdown-divider" /></li>
+                      <li>
+                        <hr className="dropdown-divider" />
+                      </li>
                       <UserList>
                         <ButtonUser className="btn text-color" onClick={logout}>
                           <i className="bi bi-box-arrow-left me-2"></i>

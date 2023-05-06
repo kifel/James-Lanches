@@ -25,7 +25,8 @@ const Login: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [passwordView, setPasswordView] = useState<boolean>(false);
   const [passwordIcon, setPasswordIcon] = useState<string>("bi bi-eye");
-  const [passwordInputType, setPasswordInputType] = useState<string>("password");
+  const [passwordInputType, setPasswordInputType] =
+    useState<string>("password");
 
   const {
     handleSubmit,
@@ -34,13 +35,16 @@ const Login: React.FC = () => {
   } = useForm<login>();
 
   useEffect(() => {
-    if (passwordView) {
-      setPasswordIcon("bi bi-eye-slash");
-      setPasswordInputType("");
-    } else {
-      setPasswordIcon("bi bi-eye");
-      setPasswordInputType("password");
-    }
+    const iconPasswordView = () => {
+      if (passwordView) {
+        setPasswordIcon("bi bi-eye-slash");
+        setPasswordInputType("");
+      } else {
+        setPasswordIcon("bi bi-eye");
+        setPasswordInputType("password");
+      }
+    };
+    iconPasswordView();
   }, [passwordView]);
 
   const onSubmit = (data: login) => {

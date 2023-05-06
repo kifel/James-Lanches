@@ -6,7 +6,12 @@ import Footer from "../../components/Footer";
 import ProductCard from "../../components/ProductCard";
 import { useDebounce } from "../../hooks/useDebounce";
 import api from "../../service/api";
-import { ProductNotFound, SearchProductBox, SelectCategory, StyledPagination } from "./styles";
+import {
+  ProductNotFound,
+  SearchProductBox,
+  SelectCategory,
+  StyledPagination,
+} from "./styles";
 
 const Products: React.FC = () => {
   const { debounce } = useDebounce(300, true);
@@ -32,9 +37,14 @@ const Products: React.FC = () => {
   }, [searchParams]);
 
   useEffect(() => {
-    api.get("/category").then((response) => {
-      setCategory(response.data);
-    });
+    const getCategory = async () => {
+      await api.get("/category").then((response) => {
+        setCategory(response.data);
+      });
+    };
+    return () => {
+      getCategory();
+    };
   }, []);
 
   useEffect(() => {
@@ -111,7 +121,7 @@ const Products: React.FC = () => {
       return renderPagination();
     }
     return (
-      <ProductNotFound  className="d-flex justify-content-center align-items-center mt-5">
+      <ProductNotFound className="d-flex justify-content-center align-items-center mt-5">
         <div className="text-center mt-5">
           <h1 className="mb-4 mt-5">Produto não encontrado</h1>
           <p className="lead">
