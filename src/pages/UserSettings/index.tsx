@@ -93,7 +93,7 @@ const UserSettings: React.FC = () => {
         setSenhasMenu("false");
         setApconectMenu("true");
       }
-    }
+    };
     setMenu(menuOption);
   }, [menuOption]);
 
@@ -122,10 +122,7 @@ const UserSettings: React.FC = () => {
           setIsFetching(false);
         });
     };
-
-    return () => {
-      fetchData();
-    };
+    fetchData();
   }, [updateProfile]);
 
   useEffect(() => {
