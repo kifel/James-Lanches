@@ -42,9 +42,7 @@ const Products: React.FC = () => {
         setCategory(response.data);
       });
     };
-    return () => {
-      getCategory();
-    };
+    getCategory();
   }, []);
 
   useEffect(() => {
