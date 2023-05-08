@@ -197,9 +197,7 @@ const ShowLoggedHeader = ({ toggleTheme, user }: PropsLogged) => {
           setIsFetching(false);
         });
     };
-    return () => {
-      loadingUser();
-    };
+    loadingUser();
   }, []);
 
   useEffect(() => {
