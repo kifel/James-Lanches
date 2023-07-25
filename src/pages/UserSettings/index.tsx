@@ -28,6 +28,8 @@ interface UpdateUser {
   password: string;
   telefone: string;
   confirm_password?: string;
+  newPassword: string;
+  newEmail: string;
 }
 
 const UserSettings: React.FC = () => {
@@ -64,6 +66,8 @@ const UserSettings: React.FC = () => {
       name: "",
       username: "",
       telefone: "",
+      newPassword: "",
+      newEmail: "",
     },
   });
 
@@ -142,6 +146,52 @@ const UserSettings: React.FC = () => {
       })
       .then((request) => {
         toast.success("Cadastro alterado com sucesso !");
+      })
+      .catch((err) => {
+        if (err.message === "Failed to refresh token") {
+          localStorage.removeItem("user");
+          navigate("/login");
+        }
+        toast.error(err.response.data.errors[0]);
+      })
+      .finally(() => {
+        setUpdating(false);
+        setUpdateProfile(!updateProfile);
+        setEditInput(!editInput);
+      });
+  };
+
+  const onSubmitPassword = (data: UpdateUser) => {
+    setUpdating(true);
+    api
+      .put("/users/update-password", {
+        password: data.newPassword,
+      })
+      .then((request) => {
+        toast.success("Cadastro alterado com sucesso !");
+      })
+      .catch((err) => {
+        if (err.message === "Failed to refresh token") {
+          localStorage.removeItem("user");
+          navigate("/login");
+        }
+        toast.error(err.response.data.errors[0]);
+      })
+      .finally(() => {
+        setUpdating(false);
+        setUpdateProfile(!updateProfile);
+        setEditInput(!editInput);
+      });
+  };
+
+  const onSubmitEmail = (data: UpdateUser) => {
+    setUpdating(true);
+    api
+      .put("/users/update/email", {
+        email: data.newEmail,
+      })
+      .then((request) => {
+        toast.success("Solicitação realizada com sucesso !");
       })
       .catch((err) => {
         if (err.message === "Failed to refresh token") {
@@ -394,7 +444,43 @@ const UserSettings: React.FC = () => {
     return (
       <div className="col-12 col-sm-7 mt-5">
         <h3>Account Settings</h3>
-        <p>EMAIL</p>
+        <form onSubmit={handleSubmit(onSubmitEmail)}>
+          <div className="row">
+            <div className="col-12">
+              <div className="form-outline mb-4">
+                <label className="form-label" htmlFor="email-2">
+                  Email:<span style={{ color: "red" }}>*</span>
+                </label>
+                <input
+                  type="email"
+                  id="email-2"
+                  className="form-control form-control-lg"
+                  placeholder="Digite o novo email"
+                  {...register("newEmail", {
+                    required: "Você deve especificar um email",
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: "Endereço de email invalido",
+                    },
+                  })}
+                />
+                {errors.newEmail && (
+                  <p className="mt-2" style={{ color: "red" }}>
+                    {errors.newEmail.message}
+                  </p>
+                )}
+              </div>
+            </div>
+            <ButtonLoading
+              type="submit"
+              className="btn btn-danger text-uppercase fw-bold mt-5"
+              disabled={updating}
+              loading={updating.toString()}
+            >
+              {updating ? "" : "Atualizar"}
+            </ButtonLoading>
+          </div>
+        </form>
       </div>
     );
   };
@@ -403,63 +489,72 @@ const UserSettings: React.FC = () => {
     return (
       <div className="col-12 col-sm-7 mt-5">
         <h3>Account Settings</h3>
-        <p>Senhas</p>
-        <div className="row">
-          <div className="col-6">
-            <div className="form-outline mb-4">
-              <label className="form-label" htmlFor="typePasswordX-2">
-                Senha:<span style={{ color: "red" }}>*</span>
-              </label>
-              <input
-                type="password"
-                id="typePasswordX-2"
-                className="form-control form-control-lg"
-                placeholder="Digite sua senha"
-                {...register("password", {
-                  required: "Você deve especificar uma senha",
-                  minLength: {
-                    value: 8,
-                    message: "A senha deve conter pelo menos 8 caracteres",
-                  },
-                })}
-              />
-              {errors.password && (
-                <p className="mt-2" style={{ color: "red" }}>
-                  {errors.password.message}
-                </p>
-              )}
+        <form onSubmit={handleSubmit(onSubmitPassword)}>
+          <div className="row">
+            <div className="col-6">
+              <div className="form-outline mb-4">
+                <label className="form-label" htmlFor="typePasswordX-2">
+                  Senha:<span style={{ color: "red" }}>*</span>
+                </label>
+                <input
+                  type="password"
+                  id="typePasswordX-2"
+                  className="form-control form-control-lg"
+                  placeholder="Digite sua senha"
+                  {...register("newPassword", {
+                    required: "Você deve especificar uma senha",
+                    minLength: {
+                      value: 8,
+                      message: "A senha deve conter pelo menos 8 caracteres",
+                    },
+                  })}
+                />
+                {errors.newPassword && (
+                  <p className="mt-2" style={{ color: "red" }}>
+                    {errors.newPassword.message}
+                  </p>
+                )}
+              </div>
             </div>
-          </div>
-          <div className="col-6">
-            <div className="form-outline mb-4">
-              <label className="form-label" htmlFor="typeEmailX-1">
-                Confirme a senha:
-                <span style={{ color: "red" }}>*</span>
-              </label>
-              <input
-                type="password"
-                id="typeEmailX-1"
-                className="form-control form-control-lg"
-                placeholder="Nova senha"
-                {...register("confirm_password", {
-                  required: "Você deve especificar uma senha",
-                  validate: (val: any, values: UpdateUser) => {
-                    if (values.password === val) {
-                      return true;
-                    } else {
-                      return "Suas senhas não coincidem";
-                    }
-                  },
-                })}
-              />
-              {errors.confirm_password && (
-                <p className="mt-2" style={{ color: "red" }}>
-                  {errors.confirm_password.message}
-                </p>
-              )}
+            <div className="col-6">
+              <div className="form-outline mb-4">
+                <label className="form-label" htmlFor="typeEmailX-1">
+                  Confirme a senha:
+                  <span style={{ color: "red" }}>*</span>
+                </label>
+                <input
+                  type="password"
+                  id="typeEmailX-1"
+                  className="form-control form-control-lg"
+                  placeholder="Nova senha"
+                  {...register("confirm_password", {
+                    required: "Você deve especificar uma senha",
+                    validate: (val: any, values: UpdateUser) => {
+                      if (values.newPassword === val) {
+                        return true;
+                      } else {
+                        return "Suas senhas não coincidem";
+                      }
+                    },
+                  })}
+                />
+                {errors.confirm_password && (
+                  <p className="mt-2" style={{ color: "red" }}>
+                    {errors.confirm_password.message}
+                  </p>
+                )}
+              </div>
             </div>
+            <ButtonLoading
+              type="submit"
+              className="btn btn-danger text-uppercase fw-bold mt-5"
+              disabled={updating}
+              loading={updating.toString()}
+            >
+              {updating ? "" : "Atualizar"}
+            </ButtonLoading>
           </div>
-        </div>
+        </form>
       </div>
     );
   };
@@ -469,6 +564,7 @@ const UserSettings: React.FC = () => {
       <div className="col-12 col-sm-7 mt-5">
         <h3>Account Settings</h3>
         <p>Aparelhos conectados</p>
+        <h1>Em construção</h1>
       </div>
     );
   };
