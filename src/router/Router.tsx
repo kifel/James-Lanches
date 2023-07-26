@@ -1,5 +1,6 @@
 import { ReactNode, useEffect, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
+import { SkeletonUserSettings } from "../components/Skeleton/SkeletonUserSettings";
 import Admin from "../pages/Admin";
 import Forbidden from "../pages/Forbidden";
 import Home from "../pages/Home";
@@ -16,12 +17,20 @@ import UserSettings from "../pages/UserSettings";
 import {
   isAuthenticated,
   isAuthenticatedAdmin,
-  isLogged
+  isLogged,
 } from "../service/auth";
+
+type SkeletonComponent = React.ComponentType<{}>;
 
 type PrivateAdminProps = {
   children: ReactNode;
+  SkeletonComponent: SkeletonComponent;
 };
+
+type PrivateProps = {
+  children: ReactNode;
+};
+
 
 interface RoutesPath {
   path: string;
@@ -57,7 +66,10 @@ export const pathsRoutesNavbarContent: RoutesPath[] = [
  * If the user is authenticated, render the children. If not, redirect to the login page
  * @param {PrivateAdminProps}  - JSX.Element
  */
-const PrivateAdmin = ({ children }: PrivateAdminProps): JSX.Element => {
+const PrivateAdmin = ({
+  children,
+  SkeletonComponent,
+}: PrivateAdminProps): JSX.Element => {
   const [isAuthenticated, setIsAuthenticated] = useState<String | undefined>(
     undefined
   );
@@ -77,11 +89,7 @@ const PrivateAdmin = ({ children }: PrivateAdminProps): JSX.Element => {
   }, []);
 
   if (isLoading) {
-    return (
-      <div className="text-center" style={{ fontSize: "45px" }}>
-        Loading...
-      </div>
-    );
+    return <SkeletonComponent />;
   } else if (isAuthenticated === "true") {
     return <>{children}</>;
   } else if (isAuthenticated === "Failed to refresh token") {
@@ -96,7 +104,7 @@ const PrivateAdmin = ({ children }: PrivateAdminProps): JSX.Element => {
  * If the user is authenticated, render the children. If not, redirect to the forbidden page.
  * @param {PrivateAdminProps}  - JSX.Element =&gt; {
  */
-const PrivateRoute = ({ children }: PrivateAdminProps): JSX.Element => {
+const PrivateRoute = ({ children, SkeletonComponent}: PrivateAdminProps): JSX.Element => {
   const [isAuth, setIsAuthenticated] = useState<String | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -114,11 +122,7 @@ const PrivateRoute = ({ children }: PrivateAdminProps): JSX.Element => {
   }, []);
 
   if (isLoading) {
-    return (
-      <div className="text-center" style={{ fontSize: "45px" }}>
-        Loading...
-      </div>
-    );
+    return <SkeletonComponent />;
   } else if (isAuth === "true") {
     return <>{children}</>;
   } else if (isAuth === "Failed to refresh token") {
@@ -129,7 +133,7 @@ const PrivateRoute = ({ children }: PrivateAdminProps): JSX.Element => {
   }
 };
 
-const IsLoggedIn = ({ children }: PrivateAdminProps): JSX.Element => {
+const IsLoggedIn = ({ children}: PrivateProps): JSX.Element => {
   const auth = isLogged();
 
   if (!auth) {
@@ -186,7 +190,7 @@ export function Router() {
       <Route
         path="/admin"
         element={
-          <PrivateAdmin>
+          <PrivateAdmin SkeletonComponent={SkeletonUserSettings}>
             <Admin />
           </PrivateAdmin>
         }
@@ -194,15 +198,15 @@ export function Router() {
       <Route
         path="/orders"
         element={
-          <PrivateRoute>
+          <PrivateRoute SkeletonComponent={SkeletonUserSettings}>
             <Orders />
           </PrivateRoute>
         }
       />
-       <Route
+      <Route
         path="/settings"
         element={
-          <PrivateRoute>
+          <PrivateRoute SkeletonComponent={SkeletonUserSettings}>
             <UserSettings />
           </PrivateRoute>
         }

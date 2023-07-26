@@ -2,7 +2,7 @@ import { shade } from "polished";
 import styled, { keyframes } from "styled-components";
 
 interface Props {
-  isactive: string;
+  isactive: boolean;
 }
 
 export const RedBackground = styled.div`
@@ -168,7 +168,7 @@ export const ImageDropzone = styled.img`
 
 export const ButtonOptionsData = styled.button<Props>`
   color: ${(props) =>
-    props.isactive == "true"
+    props.isactive
       ? props.theme.colors.secondary
       : props.theme.colors.text};
   border-bottom: 1px solid;

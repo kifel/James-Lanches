@@ -37,7 +37,6 @@ const UserSettings: React.FC = () => {
   const [image, setImage] = useState<FormData | null>(null);
   const [isFetching, setIsFetching] = useState(true);
   const [loading, setLoading] = React.useState<boolean>(false);
-  const [isAdmin, setIsAdmin] = useState<boolean>();
   const [data, setData] = useState<Data>();
   const [imagePreview, setImagePreview] = useState<string>("");
   const [error, setError] = useState(null);
@@ -46,14 +45,10 @@ const UserSettings: React.FC = () => {
   const [updating, setUpdating] = React.useState<boolean>(false);
   const navigate = useNavigate();
   const [fileSizeError, setFileSizeError] = useState(false);
-  const [menuOption, setMenuOption] = useState<string>("dados");
-  const [dataMenu, setDataMenu] = useState<string>("");
-  const [emailMenu, setEmailMenu] = useState<string>("");
-  const [senhasMenu, setSenhasMenu] = useState<string>("");
-  const [apconectMenu, setApconectMenu] = useState<string>("");
+  const [activeMenuOption, setActiveMenuOption] = useState<string>("dados");
   const [editInput, setEditInput] = useState<boolean>(true);
 
-  const MAX_FILE_SIZE = 4.5 * 1024 * 1024; // 5 MB
+  const MAX_FILE_SIZE = 4.5 * 1024 * 1024; // 4.5 MB
 
   const {
     handleSubmit,
@@ -70,36 +65,6 @@ const UserSettings: React.FC = () => {
       newEmail: "",
     },
   });
-
-  useEffect(() => {
-    const setMenu = (option: string) => {
-      if (option === "dados") {
-        setDataMenu("true");
-        setEmailMenu("false");
-        setSenhasMenu("false");
-        setApconectMenu("false");
-      }
-      if (option === "email") {
-        setDataMenu("false");
-        setEmailMenu("true");
-        setSenhasMenu("false");
-        setApconectMenu("false");
-      }
-      if (option === "senhas") {
-        setDataMenu("false");
-        setEmailMenu("false");
-        setSenhasMenu("true");
-        setApconectMenu("false");
-      }
-      if (option === "apconect") {
-        setDataMenu("false");
-        setEmailMenu("false");
-        setSenhasMenu("false");
-        setApconectMenu("true");
-      }
-    };
-    setMenu(menuOption);
-  }, [menuOption]);
 
   useEffect(() => {
     setValue("email", data?.email ?? "");
@@ -615,50 +580,40 @@ const UserSettings: React.FC = () => {
                     <div className="container mt-5">
                       <div className="row mt-5 d-flex justify-content-center">
                         <ButtonOptionsData
-                          isactive={dataMenu}
+                          isactive={activeMenuOption === "dados"}
                           className="btn col-12 mt-2"
-                          onClick={() => setMenuOption("dados")}
+                          onClick={() => setActiveMenuOption("dados")}
                         >
                           Dados
                         </ButtonOptionsData>
                         <ButtonOptionsData
-                          isactive={emailMenu}
+                          isactive={activeMenuOption === "email"}
                           className="btn col-12 mt-2"
-                          onClick={() => setMenuOption("email")}
+                          onClick={() => setActiveMenuOption("email")}
                         >
                           Email
                         </ButtonOptionsData>
                         <ButtonOptionsData
-                          isactive={senhasMenu}
+                          isactive={activeMenuOption === "senhas"}
                           className="btn col-12 mt-2"
-                          onClick={() => setMenuOption("senhas")}
+                          onClick={() => setActiveMenuOption("senhas")}
                         >
                           Senhas
                         </ButtonOptionsData>
                         <ButtonOptionsData
-                          isactive={apconectMenu}
+                          isactive={activeMenuOption === "apconect"}
                           className="btn col-12 mt-2"
-                          onClick={() => setMenuOption("apconect")}
+                          onClick={() => setActiveMenuOption("apconect")}
                         >
                           Aparelhos Conectados
                         </ButtonOptionsData>
                       </div>
                     </div>
                   </div>
-                  {(() => {
-                    if (dataMenu === "true") {
-                      return dataMenuContent();
-                    }
-                    if (emailMenu === "true") {
-                      return emailMenuContent();
-                    }
-                    if (senhasMenu === "true") {
-                      return senhasMenuContent();
-                    }
-                    if (apconectMenu === "true") {
-                      return apconectMenuContent();
-                    }
-                  })()}
+                  {activeMenuOption === "dados" && dataMenuContent()}
+                  {activeMenuOption === "email" && emailMenuContent()}
+                  {activeMenuOption === "senhas" && senhasMenuContent()}
+                  {activeMenuOption === "apconect" && apconectMenuContent()}
                 </div>
               </div>
             </Card>

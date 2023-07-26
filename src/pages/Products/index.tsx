@@ -4,6 +4,7 @@ import { CategoryProduct, PageableProduct } from "../../@types/globalTypes";
 import BackToTop from "../../components/BackToTop";
 import Footer from "../../components/Footer";
 import ProductCard from "../../components/ProductCard";
+import { SkeletonProductCard } from "../../components/Skeleton/SkeletonProductCard";
 import { useDebounce } from "../../hooks/useDebounce";
 import api from "../../service/api";
 import {
@@ -156,6 +157,18 @@ const Products: React.FC = () => {
     );
   };
 
+  const renderLoadingScreen = () => {
+    return (
+      <div className="container mt-5">
+        <div className="row">
+          <div className="col">
+            <SkeletonProductCard />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       <div className="container mt-5">
@@ -195,7 +208,11 @@ const Products: React.FC = () => {
             </SelectCategory>
           </div>
         </div>
-        {isFetching ? "Loading..." : <ProductCard data={data?.content} />}
+        {isFetching ? (
+          renderLoadingScreen()
+        ) : (
+          <ProductCard data={data?.content} />
+        )}
         {isFetching ? "" : renderNotFound()}
       </div>
       <BackToTop />
