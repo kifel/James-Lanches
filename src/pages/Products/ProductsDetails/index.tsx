@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Product } from "../../../@types/globalTypes";
 import Footer from "../../../components/Footer";
-import { AccordionWrapper } from "../../../components/Skeleton/SkeletonProductCard/styles";
 import { SkeletonProductDetails } from "../../../components/Skeleton/SkeletonProductDetails";
 import api from "../../../service/api";
-import { SkeletonLoader, StyledImage, StyledImagePlaceholder } from "./styled";
+import {
+  AccordionWrapper,
+  BackIcon,
+  SkeletonLoader,
+  StyledImage,
+  StyledImagePlaceholder,
+} from "./styled";
 
 const faqData = [
   {
@@ -31,6 +36,7 @@ const ProductsDetails: React.FC = () => {
   const [data, setData] = useState<Product | null>();
   const [erro, setErro] = useState<string>("");
   const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     api
@@ -96,7 +102,14 @@ const ProductsDetails: React.FC = () => {
 
   return (
     <>
-      <section className="container py-5 mt-5">
+      <section className="container py-5">
+        <div className="row mb-5">
+          <div className="col-6">
+            <button className="btn" onClick={() => navigate(-1)}>
+              <BackIcon className="bi bi-arrow-90deg-left"></BackIcon>
+            </button>
+          </div>
+        </div>
         <div className="row justify-content-center align-items-center">
           <div className="col-md-6 mb-4">
             {isImageLoading ? (
@@ -130,7 +143,8 @@ const ProductsDetails: React.FC = () => {
                 Disponibilidade: {data?.stock ? "Em Estoque" : "Indisponível"}
               </p>
             </div>
-            <button className="btn btn-danger mt-4">Comprar</button>
+            <button className="btn btn-danger mt-4 me-2">Comprar</button>
+            <button className="btn btn-danger mt-4">Adicionar ao Carrinho</button>
           </div>
         </div>
       </section>
