@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Product } from "../../../@types/globalTypes";
 import Footer from "../../../components/Footer";
 import { SkeletonProductDetails } from "../../../components/Skeleton/SkeletonProductDetails";
+import { CartContext } from "../../../context/CartProvider";
+import { IProduct } from "../../../context/CartProvider/types";
 import api from "../../../service/api";
 import {
   AccordionWrapper,
@@ -35,6 +37,7 @@ const ProductsDetails: React.FC = () => {
   const [isFetching, setIsFetching] = useState<boolean>(true);
   const [data, setData] = useState<Product | null>();
   const [erro, setErro] = useState<string>("");
+  const { addToCart } = useContext(CartContext);
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -58,6 +61,40 @@ const ProductsDetails: React.FC = () => {
 
   const handleImageError = () => {
     setIsImageLoading(false);
+  };
+
+  const handleAddToCart = () => {
+    if (data) {
+      const productToAdd: IProduct = {
+        id: data.id,
+        name: data.name,
+        rating: data.rating,
+        price: data.price,
+        stock: data.stock,
+        imageUrl: data.imageUrl,
+        category: data.category,
+      };
+
+      addToCart(productToAdd);
+    }
+  };
+
+  const handleAddToCartAndGoToCartPage = () => {
+    if (data) {
+      const productToAdd: IProduct = {
+        id: data.id,
+        name: data.name,
+        rating: data.rating,
+        price: data.price,
+        stock: data.stock,
+        imageUrl: data.imageUrl,
+        category: data.category,
+      };
+
+      addToCart(productToAdd);
+
+      navigate("/cart")
+    }
   };
 
   if (isFetching) {
@@ -143,8 +180,8 @@ const ProductsDetails: React.FC = () => {
                 Disponibilidade: {data?.stock ? "Em Estoque" : "Indisponível"}
               </p>
             </div>
-            <button className="btn btn-danger mt-4 me-2">Comprar</button>
-            <button className="btn btn-danger mt-4">Adicionar ao Carrinho</button>
+            <button className="btn btn-danger mt-4 me-2" onClick={handleAddToCartAndGoToCartPage}>Comprar</button>
+            <button className="btn btn-danger mt-4" onClick={handleAddToCart}>Adicionar ao Carrinho</button>
           </div>
         </div>
       </section>

@@ -4,6 +4,7 @@ import { ThemeContext } from "styled-components";
 import { Data } from "../../@types/globalTypes";
 import { IUser } from "../../context/AuthProvider/types";
 import { getUserLocalStorage } from "../../context/AuthProvider/util";
+import { CartContext } from "../../context/CartProvider";
 import { pathsRoutesNavbarContent } from "../../router/Router";
 import api from "../../service/api";
 import {
@@ -24,17 +25,23 @@ import {
   UserList,
 } from "./styles";
 
+interface PropsDefault {
+  toggleTheme(themeString: string): void;
+}
+
 interface Props {
   toggleTheme(themeString: string): void;
+  getTotalItems: number;
 }
 
 interface PropsLogged {
   toggleTheme(themeString: string): void;
   user: IUser;
+  getTotalItems: number;
 }
 
 /* The above code is a React component that is using TypeScript. */
-const ShowHeader = ({ toggleTheme }: Props) => {
+const ShowHeader = ({ toggleTheme, getTotalItems }: Props) => {
   const { title } = useContext(ThemeContext);
   const themeLight = title === "light";
   const themeDark = title === "dark";
@@ -144,7 +151,7 @@ const ShowHeader = ({ toggleTheme }: Props) => {
                         className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2"
                         style={{ fontSize: "10px" }}
                       >
-                        99+
+                        {getTotalItems}
                         <span className="visually-hidden">unread messages</span>
                       </span>
                     </NavCart>
@@ -167,7 +174,11 @@ const ShowHeader = ({ toggleTheme }: Props) => {
 };
 
 /* The above code is a React component that is responsible for rendering the header of the application. */
-const ShowLoggedHeader = ({ toggleTheme, user }: PropsLogged) => {
+const ShowLoggedHeader = ({
+  toggleTheme,
+  user,
+  getTotalItems,
+}: PropsLogged) => {
   const [isFetching, setIsFetching] = useState(true);
   const [isAdmin, setIsAdmin] = useState<boolean>();
   const [data, setData] = useState<Data>();
@@ -338,7 +349,7 @@ const ShowLoggedHeader = ({ toggleTheme, user }: PropsLogged) => {
                           className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2"
                           style={{ fontSize: "10px" }}
                         >
-                          99+
+                          {getTotalItems}
                           <span className="visually-hidden">
                             unread messages
                           </span>
@@ -413,9 +424,11 @@ const ShowLoggedHeader = ({ toggleTheme, user }: PropsLogged) => {
 
 /* Checking if the user is logged in or not. If the user is logged in, it will show the
 ShowLoggedHeader component. If the user is not logged in, it will show the ShowHeader component. */
-const Navbar: React.FC<Props> = ({ toggleTheme }) => {
+const Navbar: React.FC<PropsDefault> = ({ toggleTheme }) => {
   const location = useLocation();
   const user = getUserLocalStorage();
+  const { getTotalItems } = useContext(CartContext);
+  const cartItemCount = getTotalItems();
   const showNavbar = pathsRoutesNavbarContent.some((r) =>
     new RegExp(`^${r.path.replace(/:\w+/g, "[\\w-]+")}$`).test(
       location.pathname
@@ -447,13 +460,20 @@ const Navbar: React.FC<Props> = ({ toggleTheme }) => {
           if (user === undefined || user === null) {
             return (
               <>
-                <ShowHeader toggleTheme={toggleTheme} />
+                <ShowHeader
+                  toggleTheme={toggleTheme}
+                  getTotalItems={cartItemCount}
+                />
               </>
             );
           } else {
             return (
               <>
-                <ShowLoggedHeader toggleTheme={toggleTheme} user={user} />
+                <ShowLoggedHeader
+                  toggleTheme={toggleTheme}
+                  user={user}
+                  getTotalItems={cartItemCount}
+                />
               </>
             );
           }

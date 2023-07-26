@@ -4,6 +4,7 @@ import { Theme } from "react-toastify/dist/types";
 import { DefaultTheme, ThemeProvider } from "styled-components";
 import Navbar from "./components/Navbar";
 import { AuthProvider } from "./context/AuthProvider";
+import { CartProvider } from "./context/CartProvider";
 import { Router } from "./router/Router";
 import GloBalStyle from "./styles/global";
 import dark from "./styles/themes/dark";
@@ -28,25 +29,27 @@ function App() {
 
   return (
     <AuthProvider>
-      <ThemeProvider theme={theme}>
-        <BrowserRouter>
-          <GloBalStyle />
-          <Navbar toggleTheme={toggleTheme} />
-          <Router />
-        </BrowserRouter>
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme={theme.title as Theme}
-        />
-      </ThemeProvider>
+      <CartProvider>
+        <ThemeProvider theme={theme}>
+          <BrowserRouter>
+            <GloBalStyle />
+            <Navbar toggleTheme={toggleTheme} />
+            <Router />
+          </BrowserRouter>
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme={theme.title as Theme}
+          />
+        </ThemeProvider>
+      </CartProvider>
     </AuthProvider>
   );
 }
