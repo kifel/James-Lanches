@@ -1,11 +1,12 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Product } from "../../../@types/globalTypes";
+import { toast } from "react-toastify";
+import BackToTop from "../../../components/BackToTop";
 import Footer from "../../../components/Footer";
 import { SkeletonProductDetails } from "../../../components/Skeleton/SkeletonProductDetails";
 import { CartContext } from "../../../context/CartProvider";
 import { IProduct } from "../../../context/CartProvider/types";
-import api from "../../../service/api";
+import useProductDetails from "../../../hooks/useProductDetails";
 import {
   AccordionWrapper,
   BackIcon,
@@ -33,27 +34,11 @@ const faqData = [
 ];
 
 const ProductsDetails: React.FC = () => {
-  const [isImageLoading, setIsImageLoading] = useState<boolean>(true);
-  const [isFetching, setIsFetching] = useState<boolean>(true);
-  const [data, setData] = useState<Product | null>();
-  const [erro, setErro] = useState<string>("");
-  const { addToCart } = useContext(CartContext);
   const { id } = useParams();
+  const { data, isFetching, error } = useProductDetails(id);
+  const [isImageLoading, setIsImageLoading] = useState<boolean>(true);
+  const { addToCart } = useContext(CartContext);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    api
-      .get(`/products/${id}`)
-      .then((response) => {
-        setData(response.data);
-      })
-      .catch((err) => {
-        setErro(err.data);
-      })
-      .finally(() => {
-        setIsFetching(false);
-      });
-  }, []);
 
   const handleImageLoad = () => {
     setIsImageLoading(false);
@@ -76,6 +61,16 @@ const ProductsDetails: React.FC = () => {
       };
 
       addToCart(productToAdd);
+
+      toast.success("Item added to cart!", {
+        position: "top-right",
+        autoClose: 5000, // Auto-close after 5 seconds
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+      });
     }
   };
 
@@ -93,24 +88,33 @@ const ProductsDetails: React.FC = () => {
 
       addToCart(productToAdd);
 
-      navigate("/cart")
+      toast.success("Item added to cart!", {
+        position: "top-right",
+        autoClose: 5000, // Auto-close after 5 seconds
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+      });
+
+      navigate("/cart");
     }
   };
 
   if (isFetching) {
-    // Show loading placeholder using Bootstrap spinner
     return <SkeletonProductDetails />;
   }
 
-  if (erro) {
+  if (error) {
     // Show error page using Bootstrap alert
     return (
       <div
-        className="alert alert-danger d-flex justify-content-center align-items-center vh-100"
+        className="alert alert-danger d-flex flex-column justify-content-center align-items-center vh-100"
         role="alert"
       >
         <h2>Error</h2>
-        <p>{erro}</p>
+        <p>{error}</p>
       </div>
     );
   }
@@ -180,8 +184,15 @@ const ProductsDetails: React.FC = () => {
                 Disponibilidade: {data?.stock ? "Em Estoque" : "Indisponível"}
               </p>
             </div>
-            <button className="btn btn-danger mt-4 me-2" onClick={handleAddToCartAndGoToCartPage}>Comprar</button>
-            <button className="btn btn-danger mt-4" onClick={handleAddToCart}>Adicionar ao Carrinho</button>
+            <button
+              className="btn btn-danger mt-4 me-2"
+              onClick={handleAddToCartAndGoToCartPage}
+            >
+              Comprar
+            </button>
+            <button className="btn btn-danger mt-4" onClick={handleAddToCart}>
+              Adicionar ao Carrinho
+            </button>
           </div>
         </div>
       </section>
@@ -217,6 +228,7 @@ const ProductsDetails: React.FC = () => {
           </div>
         </AccordionWrapper>
       </section>
+      <BackToTop />
       <Footer />
     </>
   );

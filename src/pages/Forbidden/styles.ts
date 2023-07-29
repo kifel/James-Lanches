@@ -2,7 +2,7 @@ import { shade } from "polished";
 import styled from "styled-components";
 import p404 from "./../../assets/p404.png";
 
-export const ContainerForbidden = styled.body`
+export const ContainerForbidden = styled.section`
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -10,7 +10,7 @@ export const ContainerForbidden = styled.body`
   height: 100vh;
 `;
 
-export const ContentForbidden = styled.body`
+export const ContentForbidden = styled.article`
   position: absolute;
   width: 100%;
   height: 100%;
@@ -102,7 +102,7 @@ export const ButtonForbidden = styled.button`
   }
 `;
 
-/* 
+/*
 <script type="text/javascript">
     var container = document.createElementById('container');
     window.onmousemove = function(e){

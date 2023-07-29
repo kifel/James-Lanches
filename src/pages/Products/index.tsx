@@ -1,12 +1,9 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import { CategoryProduct, PageableProduct } from "../../@types/globalTypes";
+import React from "react";
 import BackToTop from "../../components/BackToTop";
 import Footer from "../../components/Footer";
 import ProductCard from "../../components/ProductCard";
 import { SkeletonProductCard } from "../../components/Skeleton/SkeletonProductCard";
-import { useDebounce } from "../../hooks/useDebounce";
-import api from "../../service/api";
+import useProductsData from "../../hooks/useProductsData";
 import {
   ProductNotFound,
   SearchProductBox,
@@ -15,105 +12,18 @@ import {
 } from "./styles";
 
 const Products: React.FC = () => {
-  const { debounce } = useDebounce(300, true);
-  const [page, setPage] = useState(0);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [isFetching, setIsFetching] = useState<boolean>(true);
-  const [data, setData] = useState<PageableProduct | null>();
-  const [category, setCategory] = useState<CategoryProduct[]>();
-  const [erro, setErro] = useState<string>("");
-
-  const categoria = useMemo(() => {
-    return searchParams.get("categoria") || "";
-  }, [searchParams]);
-
-  const buscar = useMemo(() => {
-    return searchParams.get("buscar") || "";
-  }, [searchParams]);
-
-  const pagina = useMemo(() => {
-    const atualPage = Number(searchParams.get("pagina") || "1");
-    setPage(atualPage - 1);
-    return atualPage;
-  }, [searchParams]);
-
-  useEffect(() => {
-    const getCategory = async () => {
-      await api.get("/category").then((response) => {
-        setCategory(response.data);
-      });
-    };
-    getCategory();
-  }, []);
-
-  useEffect(() => {
-    debounce(() => {
-      setData(null);
-      setIsFetching(true);
-      setErro("");
-      if (buscar === "" && categoria === "") {
-        api
-          .get(`/products/search?isActive=true&page=${page}&size=12`)
-          .then((response) => {
-            setData(response.data);
-          })
-          .catch((err) => {
-            setErro(err.data);
-          })
-          .finally(() => {
-            setIsFetching(false);
-          });
-      }
-
-      if (buscar === "" && categoria !== "") {
-        api
-          .get(
-            `/products/search?categoryName=${categoria}&isActive=true&page=${page}&size=12`
-          )
-          .then((response) => {
-            setData(response.data);
-          })
-          .catch((err) => {
-            setErro(err.data);
-          })
-          .finally(() => {
-            setIsFetching(false);
-          });
-      }
-
-      if (categoria === "" && buscar !== "") {
-        api
-          .get(
-            `/products/search?name=${buscar}&isActive=true&page=${page}&size=12`
-          )
-          .then((response) => {
-            setData(response.data);
-          })
-          .catch((err) => {
-            setErro(err.data);
-          })
-          .finally(() => {
-            setIsFetching(false);
-          });
-      }
-
-      if (buscar && categoria !== "") {
-        api
-          .get(
-            `/products/search?name=${buscar}&categoryName=${categoria}&isActive=true&page=${page}&size=12`
-          )
-          .then((response) => {
-            setData(response.data);
-          })
-          .catch((err) => {
-            setErro(err.data);
-          })
-          .finally(() => {
-            setIsFetching(false);
-          });
-      }
-    });
-  }, [buscar, page, categoria]);
+  const {
+    isFetching,
+    data,
+    category,
+    erro,
+    buscar,
+    setBuscar,
+    categoria,
+    setCategoria,
+    pagina,
+    setSearchParams,
+  } = useProductsData();
 
   const renderNotFound = () => {
     if (!isFetching && erro === "" && data && data.numberOfElements > 0) {
@@ -179,12 +89,7 @@ const Products: React.FC = () => {
               placeholder="Buscar"
               value={buscar}
               className="form-control"
-              onChange={(e) =>
-                setSearchParams(
-                  { buscar: e.target.value, categoria },
-                  { replace: true }
-                )
-              }
+              onChange={(e) => setBuscar(e.target.value)}
             />
           </div>
           <div className="col-6">
@@ -192,12 +97,7 @@ const Products: React.FC = () => {
               className="form-select"
               aria-label="Default select example"
               value={categoria}
-              onChange={(e) =>
-                setSearchParams(
-                  { categoria: e.target.value, buscar },
-                  { replace: true }
-                )
-              }
+              onChange={(e) => setCategoria(e.target.value)}
             >
               <option value="">Todas as categorias</option>
               {category?.map((cat) => (

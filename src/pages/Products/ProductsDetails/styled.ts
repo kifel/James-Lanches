@@ -1,6 +1,10 @@
 import { shade } from "polished";
 import styled, { keyframes } from "styled-components";
 
+interface Props {
+  toastVisible: boolean
+}
+
 const shimmer = keyframes`
   0% {
     background-position: -1000px 0;
